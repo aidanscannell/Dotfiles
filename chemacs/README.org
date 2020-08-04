@@ -1,0 +1,247 @@
+#+BEGIN_SRC
+       ___           ___           ___           ___           ___           ___           ___
+      /  /\         /__/\         /  /\         /__/\         /  /\         /  /\         /  /\
+     /  /:/         \  \:\       /  /:/_       |  |::\       /  /::\       /  /:/        /  /:/_
+    /  /:/           \__\:\     /  /:/ /\      |  |:|:\     /  /:/\:\     /  /:/        /  /:/ /\
+   /  /:/  ___   ___ /  /::\   /  /:/ /:/_   __|__|:|\:\   /  /:/~/::\   /  /:/  ___   /  /:/ /::\
+  /__/:/  /  /\ /__/\  /:/\:\ /__/:/ /:/ /\ /__/::::| \:\ /__/:/ /:/\:\ /__/:/  /  /\ /__/:/ /:/\:\
+  \  \:\ /  /:/ \  \:\/:/__\/ \  \:\/:/ /:/ \  \:\~~\__\/ \  \:\/:/__\/ \  \:\ /  /:/ \  \:\/:/~/:/
+   \  \:\  /:/   \  \::/       \  \::/ /:/   \  \:\        \  \::/       \  \:\  /:/   \  \0.1 /:/
+    \  \:\/:/     \  \:\        \  \:\/:/     \  \:\        \  \:\        \  \:\/:/     \__\/ /:/
+     \  \::/       \  \:\        \  \::/       \  \:\        \  \:\        \  \::/        /__/:/
+      \__\/         \__\/         \__\/         \__\/         \__\/         \__\/         \__\/
+
+
+
+                                   ... ........,**********,...
+                            .%*....       .,/(((#//(//*,*,,,*.,#%&(,,/(##.
+                              %/..                          ,,  ,*,*/(%%.
+                               %/*.                         .. .,,.,#%&
+                                &(,.                       .. ....((%&.
+                                 ,#,.                     ..  ...*/#%
+                                  .#,..                   .  ..,/(%#
+                                   .#,.                  ..  .,,(#%
+                                     #*,.               .. .,,.(%(
+                                    ***//((((((((//****,,**//,/  .
+                                    ///((#%%%%%%%##(///////*./,,,,
+                                     /#(##%%%%%%%%%##(((//*.(**,*
+                                      .(/###%%%%%%##(((/// (/,,,
+                                       ,*/(##%%%%##(((/((/(/*.
+                                       *((###%%%%%%%%%%%&&(*..
+                                       .((###%%%%%%%%##((####/,//
+                                       **//((###(###%%%#%%#&/%(%#(.
+                                      ,**//(((((((/((##%#%#/%##%*/.
+                                     ***///(/(((/////((((%**../..   //
+                                    **//(((###(((((//////%/***(,..   /&
+                                    ,####%%%%%%%%###((//(%,*/((/**    #*
+                                    ./,,                *%..,..*&%    ,#
+                                   ,(,.                 *%   .../%&    @
+                                  *#,.                  *%,  ....,%&   &.
+                                 (/,                   .&&&%/   ..,%&  %,
+                                %/,                        ((.   .,,%&%%/,
+                               #*.                                .*(%%%@,
+                              #,.                                 ..,,%&.,
+                             ,/....                              .... ,%%
+                             %,,.....                  ......   ,* ....#&.
+                             #,,,,..      .....................  ....,/#%*
+                             #*,,*.......  ...................,,,****/(%%,
+                             ,(*/**,.......................,,,,,**//###%#
+                              /#/(((/**,...  .............,,,,/(##%%%##@
+                               /.*/((/,,,,,.,/(###########(/(((((#%%#&&
+                                 ,(#(/,,.......,,,,,,,,/(///(#%%%%#
+                                  ./(*,..                  ..,*((#&/
+                                      ...,..,..,/###(//(#(/*,.. .
+#+END_SRC
+
+* Chemacs
+
+Chemacs is an Emacs profile switcher, it makes it easy to run multiple Emacs
+configurations side by side.
+
+Think of it as a bootloader for Emacs.
+
+** Rationale
+
+Emacs configuration is either kept in a =~/.emacs= file or, more commonly, in a
+=~/.emacs.d= directory. These paths are hard-coded. If you want to try out
+someone else's configuration, or run different distributions like Prelude or
+Spacemacs, then you either need to swap out =~/.emacs.d=, or run Emacs with a
+different =$HOME= directory set.
+
+This last approach is quite common, but has some real drawbacks, since now
+packages will no longer know where your actual home directory is.
+
+All of these makes trying out different Emacs configurations and distributions
+needlessly cumbersome.
+
+Various approaches to solving this have been floated over the years. There's an
+Emacs patch around that adds an extra command line option, and various examples
+of how to add a command line option in userspace from Emacs Lisp.
+
+Chemacs tries to implement this idea in a user-friendly way, taking care of the
+various edge cases and use cases that come up.
+
+** Installation
+
+Clone the Git repository, and run =install.sh=
+
+#+BEGIN_SRC shell
+$ git clone https://github.com/plexus/chemacs.git
+$ cd chemacs
+$ ./install.sh
+OK      Creating symlink ~/.emacs -> /home/arne/chemacs/.emacs
+#+END_SRC
+
+The install script will symlink =~/.emacs= to the Chemacs script. If you
+already have a =~/.emacs= you need to move it out of the way first
+
+#+BEGIN_SRC shell
+$ ./install.sh
+WARN    chemacs can't be installed, ~/.emacs is in the way
+#+END_SRC
+
+By symlinking you can easily update Chemacs with a =git pull=. Chemacs is not
+available on ELPA/MELPA because its special position in the Emacs boot process
+would cause a chicken and egg problem.
+
+There's a similar script for Windows called =install.sh=.
+
+#+BEGIN_SRC powershell
+$ git clone https://github.com/plexus/chemacs.git
+$ cd chemacs
+$ .\install.ps1
+OK copying file to ~/.emacs
+#+END_SRC
+
+The Windows script copies the ~/.emacs file rather than symlinking it, as
+symlinks in Windows require elevated privileges. To update the file, run
+=install.ps1= a second time, if necessary - it uses hashing to detect
+changes and prompts for conformation before overwriting
+
+#+BEGIN_SRC powershell
+$ .\install.ps1
+WARN content is different between C:\Users\Me\.emacs and C:\Users\Me\repos\chemacs\.emacs
+WARN chemacs may already be installed OR something else may be in the way
+Do you want to overwrite C:\Users\Me\.emacs?: y
+OK updated chemacs files successfully.
+#+END_SRC
+
+** Usage
+
+Chemacs adds an extra command line option to Emacs, =--with-profile=. Profiles
+are configured in =~/.emacs-profiles.el=. If this file does not exist
+Chemacs will create it with a default profile pointing at =~/.emacs.d=.
+
+If no profile is given at the command line then the default profile is used, so
+if you currently have your emacs configuration in =~/.emacs.d= then Chemacs
+will, by default, use your existing configuration.
+
+#+BEGIN_SRC shell
+$ emacs --with-profile my-profile
+#+END_SRC
+
+** .emacs-profiles.el
+
+This file contains an association list, with the keys/cars being the profile
+names, and the values/cdrs their configuration.
+
+The main thing to configure is the =user-emacs-directory=
+
+#+BEGIN_SRC emacs-lisp
+  (("default" . ((user-emacs-directory . "~/.emacs.d")))
+   ("spacemacs" . ((user-emacs-directory . "~/spacemacs"))))
+#+END_SRC
+
+Chemacs will set this to be the =user-emacs-directory= in use, and load
+=init.el= from that directory.
+
+Other things you can configure
+
+- =custom-file= : The file where Customize stores its customizations. If this
+  isn't configured, and the =custom-file= variable is still unset after loading
+  the profile's =init.el=, then this will get set to the profile's =init.el=
+- =server-name= : Sets the =server-name= variable, so you can distinguish multiple
+  instances with =emacsclient -s <server-name>=.
+- =env= An association list of environment variables. These will get set before
+  loading the profile, so they can influence the initialization, and they are
+  visible to any subprocesses spawned from Emacs.
+- =straight-p= Enable the [[https://github.com/raxod502/straight.el][Straight]]
+  functional package manager.
+
+Store =.emacs-profiles.el= together with your dotfiles. If you're not yet keeping
+a version controlled directory of dotfiles, then check out
+[[https://github.com/plexus/dotfiles/blob/master/connect-the-dots][connect-the-dots]]
+for a helpful script to do that.
+
+** Changing the default profile (e.g. for GUI editors)
+
+Where it is not possible to use the =--with-profile= flag, the default profile
+can be set using a =~/.emacs-profile= file.
+
+If your =~/.emacs-profiles.el= file contains the following:
+
+#+BEGIN_SRC emacs-lisp
+  (("default" . ((user-emacs-directory . "~/.emacs.d")))
+   ("spacemacs" . ((user-emacs-directory . "~/spacemacs")))
+   ("prelude" . ((user-emacs-directory . "~/prelude"))))
+#+END_SRC
+
+you can create a file called =~/.emacs-profile=, containing the name of the
+profile you'd like to be used when none is given on the command line:
+
+#+BEGIN_SRC shell
+$ echo 'spacemacs' > ~/.emacs-profile
+#+END_SRC
+
+This will set the default profile to be the "spacemacs" profile, instead of
+"default". You can change the default by simply changing the contents of this
+file:
+
+#+BEGIN_SRC shell
+$ echo 'prelude' > ~/.emacs-profile
+#+END_SRC
+
+If this file doesn't exist, then "default" will be used, as before.
+
+** Spacemacs
+
+Spacemacs is typically installed by cloning the Spacemacs repo to =~/.emacs.d=,
+and doing extra customization from =~/.spacemacs= or =~/.spacemacs.d/init.el=.
+This makes it tedious to switch between version of Spacemacs, or between
+different Spacemacs configurations.
+
+With Chemacs you can point your =user-emacs-directory= to wherever you have
+Spacemacs installed, and use the =SPACEMACSDIR= environment variable to point at
+a directory with customizations that are applied on top of the base install.
+
+#+BEGIN_SRC emacs-lisp
+(("spacemacs" . ((user-emacs-directory . "~/spacemacs")
+                 (env . (("SPACEMACSDIR" . "~/.spacemacs.d")))))
+
+ ("spacemacs-develop" . ((user-emacs-directory . "~/spacemacs/develop")
+                        (env . (("SPACEMACSDIR" . "~/.spacemacs.d")))))
+
+ ("new-config" . ((user-emacs-directory . "~/spacemacs/develop")
+                  (env . (("SPACEMACSDIR" . "~/my-spacemacs-config"))))))
+#+END_SRC
+
+** DOOM emacs
+
+You can add an entry similar to the following to your =.emacs-profiles.el=
+
+In the following snippet =~/doom-emacs= is where you have cloned doom emacs.
+
+(Depending on when you read this) =DOOMDIR= support is only in =develop= branch of doom emacs. Check commit history of =master= branch of doom emacs
+
+#+BEGIN_SRC emacs-lisp
+("doom" . ((user-emacs-directory . "~/doom-emacs")
+           (env . (("DOOMDIR" . "~/doom-config")))))
+#+END_SRC
+
+Please refer to [[https://github.com/plexus/chemacs/issues/5][this]] discussion for details.
+
+** LICENSE
+
+Copyright © Arne Brasseur 2018-2020
+
+Distributed under the terms of the GPL v3.

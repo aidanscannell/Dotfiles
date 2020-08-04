@@ -1,0 +1,1 @@
+/Users/aidanscannell/.dotfiles/chemacs/.emacs
