@@ -112,8 +112,8 @@ source $ZSH/oh-my-zsh.sh
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
-alias zshconfig="mate ~/.zshrc"
-alias ohmyzsh="mate ~/.oh-my-zsh"
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # Virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
@@ -127,40 +127,12 @@ alias neofetch="neofetch --ascii .config/neofetch/ascii/dr-robot-ascii"
 neofetch
 
 # Configure emacs and emacsclient
-#export EMACS_CLIENT='/usr/local/opt/emacs-mac/bin/emacsclient -nw'
-#export EMACS_CLIENT='/usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/bin/emacsclient'
-#export EMACS_BIN_DIR="/usr/local/opt/emacs-mac/bin"
 alias te="~/.emacs.d/emacs-client-server.sh"
-#export EDITOR='open -a /usr/local/opt/emacs-mac/Emacs.app'
-#export EDITOR="/usr/local/opt/emacs-mac/bin/emacsclient -c -s ~/.emacs.d/server/server"
-#export EMACS_SERVER=$HOME"/.emacs.d/server/server"
-#export EDITOR="/usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/bin/emacsclient -c -s ~/.emacs.d/server/server"
-#export EDITOR="/usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/bin/emacsclient -c -s "$EMACS_SERVER
 alias emacsclient='/usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/bin/emacsclient'
-#alias emacs='/usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/bin/Emacs'
 alias emacs='/usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/Emacs.sh'
-#alias emacs='/usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/Emacs'
 export EDITOR=""
+#alias emacsclient='/usr/local/opt/emacs-mac/bin/emacsclient'
 
-# Functions for restarting and stopiing emacs server for emacsclient
-#function emrestart {
-#    if pgrep "emacs.*daemon" > /dev/null
-#    then
-#        echo "killing emacs daemon process"
-#        $EMACS_BIN_DIR/emacsclient -e "(kill-emacs)"
-#    fi
-#    launchctl unload "$HOME/Library/LaunchAgents/emacsserver.plist" &&
-#        launchctl load "$HOME/Library/LaunchAgents/emacsserver.plist"
-#}
-#
-#function emstop {
-#    if pgrep "emacs.*daemon" > /dev/null
-#    then
-#        echo "killing emacs daemon process"
-#        $EMACS_BIN_DIR/emacsclient -e "(kill-emacs)"
-#    fi
-#}
-#
 pdfcompress ()
 {
     gs -q -dNOPAUSE -dBATCH -dSAFER -sDEVICE=pdfwrite -dCompatibilityLevel=1.3 -dPDFSETTINGS=/screen -dEmbedAllFonts=true -dSubsetFonts=true -dColorImageDownsampleType=/Bicubic -dColorImageResolution=144 -dGrayImageDownsampleType=/Bicubic -dGrayImageResolution=144 -dMonoImageDownsampleType=/Bicubic -dMonoImageResolution=144 -sOutputFile=$1.compressed.pdf $1;
@@ -170,3 +142,41 @@ pdfcompress ()
 export PATH=/Library/Developer/Toolchains/swift-latest/usr/bin:"${PATH}"
 
 alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+
+em()
+{
+    args=""
+    nw=false
+    # check if emacsclient is already running
+    if pgrep -U $(id -u) emacsclient > /dev/null; then running=true; fi
+
+    # check if the user wants TUI mode
+    for arg in "$@"; do
+    	if [ "$arg" = "-nw" ] || [ "$arg" = "-t" ] || [ "$arg" = "--tty" ]
+	then
+    	    nw=true
+    	fi
+    done
+
+    # if called without arguments - open a new gui instance
+    if [ "$#" -eq "0" ] || [ "$running" != true ]; then
+	args=(-c $args) 		# open emacsclient in a new window
+    fi
+    if [ "$#" -gt "0" ]; then
+	# if 'em -' open standard input (e.g. pipe)
+	if [[ "$1" == "-" ]]; then
+    	    TMP="$(mktemp /tmp/emacsstdin-XXX)"
+    	    cat >$TMP
+	    args=($args --eval '(let ((b (generate-new-buffer "*stdin*"))) (switch-to-buffer b) (insert-file-contents "'${TMP}'") (delete-file "'${TMP}'"))')
+	else
+	    args=($@ $args)
+	fi
+    fi
+
+    # emacsclient $args
+    if $nw; then
+	emacsclient "${args[@]}"
+    else
+	(nohup emacsclient "${args[@]}" > /dev/null 2>&1 &) > /dev/null
+    fi
+}
