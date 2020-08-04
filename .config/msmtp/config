@@ -1,0 +1,40 @@
+defaults
+auth	on
+tls	on
+tls_trust_file	/etc/ssl/cert.pem
+logfile	~/.config/msmtp/msmtp.log
+
+account gmail
+host smtp.gmail.com
+port 587
+from scannell.aidan@gmail.com
+user scannell.aidan@gmail.com
+#passwordeval "pass mutt-wizard-gmail"
+passwordeval "security find-internet-password -a 'scannell.aidan@gmail.com' -s 'imap.gmail.com' -w"
+
+
+account uob-gmail
+host smtp.gmail.com
+port 587
+from as12528@my.bristol.ac.uk
+user as12528@my.bristol.ac.uk
+#passwordeval "pass mutt-wizard-uob-gmail"
+passwordeval "security find-internet-password -a 'as12528@my.bristol.ac.uk' -s 'imap.gmail.com' -w"
+
+
+account uob
+host smtp.office365.com
+port 587
+from as12528@bristol.ac.uk
+user as12528@bristol.ac.uk
+passwordeval "security find-internet-password -a 'as12528@bristol.ac.uk' -s 'imap.bristol.ac.uk' -w"
+#passwordeval "pass mutt-wizard-uob"
+
+
+account yahoo
+host smtp.mail.yahoo.com
+port 587
+from aidanscannell@btinternet.com
+user aidanscannell@btinternet.com
+#passwordeval "pass mutt-wizard-yahoo"
+passwordeval "security find-internet-password -a 'aidanscannell@btinternet.com' -s 'imap.mail.yahoo.com' -w"
