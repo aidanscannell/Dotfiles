@@ -47,20 +47,24 @@ Use emacs-mac and put this in user-config to fix,
 Emacs profile switcher. Makes it easy to run multiple Emacs configs side by side.
 - =~/.emacs-profile= sets the default config to use,
 - =~/.emacs-profiles.el= sets the all of the configs with the path to their directory and config file,
-#+BEGIN_SRC
-(("vanilla" . ((user-emacs-directory . "~/.dotfiles/vanilla-emacs")))
+- Use =C-c C-v t= on this src block to "tangle" i.e. create file =~/.emacs-profiles.el=,
+#+BEGIN_SRC bash :tangle ~/.emacs-profiles.el
+(("vanilla" . ((user-emacs-directory . "~/.emacs.d/configs/vanilla-emacs")))
 
 ("spacemacs-old-m" . ((user-emacs-directory . "~/spacemacs")
-                 (env . (("SPACEMACSDIR" . "~/.dotfiles/spacemacs-old")))))
+                 (env . (("SPACEMACSDIR" . "~/.emacs.d/configs/spacemacs-old")))))
 
 ("spacemacs-old-d" . ((user-emacs-directory . "~/spacemacs/develop")
-                 (env . (("SPACEMACSDIR" . "~/.dotfiles/spacemacs-old")))))
+                 (env . (("SPACEMACSDIR" . "~/.emacs.d/configs/spacemacs-old")))))
 
 ("spacemacs-master" . ((user-emacs-directory . "~/spacemacs")
-                 (env . (("SPACEMACSDIR" . "~/.dotfiles/spacemacs-base-new")))))
+                 (env . (("SPACEMACSDIR" . "~/.emacs.d/configs/spacemacs-base-new")))))
+
+("org-config" . ((user-emacs-directory . "~/spacemacs/develop-org")
+                       (env . (("SPACEMACSDIR" . "~/.emacs.d/configs/spacemacs-org-config")))))
 
  ("new-config" . ((user-emacs-directory . "~/spacemacs/develop")
-                  (env . (("SPACEMACSDIR" . "~/.dotfiles/spacemacs-base-new"))))))
+                  (env . (("SPACEMACSDIR" . "~/.emacs.d/configs/spacemacs-base-new"))))))
 #+END_SRC
 
 *** Emacs Server/Client
