@@ -1,0 +1,42 @@
+# -*- mode: snippet -*-
+#name : graphical-model-sparse
+#key : graphical-model-sparse
+#contributor : Aidan Scannell
+# --
+\tikzset{
+-|/.style={to path={-| (\tikztotarget)}},
+|-/.style={to path={|- (\tikztotarget)}},
+}
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}[
+        pre/.style={<-,shorten <=0.4pt,>=stealth',semithick},
+        post/.style={->,shorten >=0.4pt,>=stealth',semithick}
+    ]
+		\node[obs] (x) {$\mathbf{x}_n$};
+		\node[latent, xshift=-1.2cm, below=of x] (f) {$\mathbf{f}^{(k)}_n$};
+		\node[obs, below=of f, xshift=1.2cm] (y) {$\mathbf{y}_n$};
+		\node[latent, xshift=1.2cm, below=of x] (h) {$\mathbf{h}_n$};
+		\node[latent, below=of h, yshift=-0.08cm] (a) {$\alpha_n$};
+
+		\node[latent, left=of f, xshift=0.4cm] (uk) {$\mathbf{U}^{(k)}$};
+		\node[latent, right=of h, xshift=-0.4cm] (uh) {$\mathbf{U}_h$};
+		\node[const, left=of uk, xshift=0.4cm] (zk) {$\mathbf{Z}^{(k)}$};
+		\node[const, right=of uh, xshift=-0.4cm] (zh) {$\mathbf{Z}_h$};
+
+		\draw[post] (a)--(y);
+		\draw[post] (x)-|(f);
+		\draw[post] (f)|-(y);
+		\draw[post] (x)-|(h);
+		\draw[post] (h)--(a);
+		\draw[post] (uk)--(f);
+		\draw[post] (uh)--(h);
+		\draw[post] (zk)--(uk);
+		\draw[post] (zh)--(uh);
+
+		\plate {} {(x) (y) (a) (f)} {$N$};
+		\plate {} {(zk) (uk) (f)} {$K$};
+	\end{tikzpicture}
+	\caption{Graphical model of our model augmented with auxiliary variables.}
+  \label{fig:graphical_model_sparse}
+\end{figure}

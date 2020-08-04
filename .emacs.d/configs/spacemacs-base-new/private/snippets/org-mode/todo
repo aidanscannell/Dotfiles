@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+#name : todo
+#key : tddo
+#contributor : Aidan Scannell
+# --
+\todo[inline]{$0}

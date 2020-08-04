@@ -1,0 +1,21 @@
+# -*- mode: snippet -*-
+# name : Adds org headers for hugo academic post
+# key : post-hugo
+# contributor: Aidan Scannell <scannell.aidan@gmail.com>
+# --
+#+hugo_base_dir: ../../..
+#+hugo_section: ./post/`(read-string "Enter post title: ")`
+
+#+hugo_weight: auto
+#+hugo_auto_set_lastmod: t
+
+#+title: $0
+#+hugo_custom_front_matter: :subtitile
+#+hugo_custom_front_matter: :summary
+#+authors: Aidan Scannell
+#+hugo_tags:
+#+hugo_custom_front_matter: :categories
+#+date: `(format-time-string "%Y-%m-%dT%T")`
+#+lastmod: (org-insert-time-stamp (current-time))
+#+hugo_custom_front_matter: :featured false
+#+draft: True
