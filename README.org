@@ -7,14 +7,14 @@
 
 This repository contains my OSX dotfiles.
 They are version controlled using a git bare repository, as seen in [[https://www.atlassian.com/git/tutorials/dotfiles][this blog post]].
+The setup goes something like this.
 #+BEGIN_SRC zsh
 git init --bare $HOME/Dotfiles
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 config config --local status.showUntrackedFiles no
 echo "alias config='/usr/bin/git --git-dir=$HOME/Dotfiles/ --work-tree=$HOME'" >> $HOME/.zshrc
 #+END_SRC
-
-Example usage,
+The config alias can be used like,
 #+BEGIN_SRC zsh
 config add .zshrc
 config commit -m 'Added zshrc'
