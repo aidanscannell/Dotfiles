@@ -1,4 +1,4 @@
 #!/bin/zsh
 # This hook is sourced after a new virtualenv is activated.
 
-pip install -r ~/.dotfiles/virtualenvs/dev_requirements.txt
+pip install -r ~/.virtualenvs/dev_requirements.txt
