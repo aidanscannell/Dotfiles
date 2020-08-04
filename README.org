@@ -3,20 +3,29 @@
 #+HTML_HEAD: <style> #content{max-width:1800px;}</style>
 # #+HTML_HEAD: <style> p{max-width:800px;}</style>
 # #+HTML_HEAD: <style> li{max-width:800px;}</style
-* DrRobots .dotfiles 
+* DrRobots .dotfiles
 
-To setup symlinks on fresh install run the following commands:
+This repository contains my OSX dotfiles.
+They are version controlled using a git bare repository, as seen in [[https://www.atlassian.com/git/tutorials/dotfiles][this blog post]].
+#+BEGIN_SRC zsh
+git init --bare $HOME/Dotfiles
+alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+config config --local status.showUntrackedFiles no
+echo "alias config='/usr/bin/git --git-dir=$HOME/Dotfiles/ --work-tree=$HOME'" >> $HOME/.zshrc
+#+END_SRC
 
-#+BEGIN_SRC 
-chmod +x symlinks.sh
-./symlinks.sh
+Example usage,
+#+BEGIN_SRC zsh
+config add .zshrc
+config commit -m 'Added zshrc'
+config push
 #+END_SRC
 
 * Config Notes
 ** Mac
 *** Emacs
 
-This file is my Spacemacs configuration in literate form
+This section details my Emacs and Spacemacs configurations.
 
 **** Install (with homebrew)
 Some Emacs installs do not work with yabai tiling window manager or support retina pdf quality in PDFView.
@@ -26,7 +35,7 @@ Link emacs-mac to =/usr/local/bin/emacs=.
 - =brew link emacs-mac=
 [[https://ylluminarious.github.io/2019/05/23/emacs-mac-port-introduction/][This is a good blog post detailing the perks of using Emacs Mac Port.]]
 
-**** pdf quality 
+**** pdf quality
 Emacs/Emacs-plus install and pdf-tools renders low quality pdfs.
 Use emacs-mac and put this in user-config to fix,
 #+begin_src emacs-lisp :tangle yes
@@ -108,62 +117,6 @@ Use =C-c C-v t= on this src block to "tangle" i.e. create file =~/.emacs.d/emacs
   #     #     ${EMACS_CLIENT} ${NO_WAIT} ${DEFAULT_ARGS} "${DEFAULT_EVAL}" &> /dev/null
   #     # fi
   # }
-
-  # echo -e "Checking Emacs server status...\c"
-  # if pgrep Emacs &> /dev/null
-  # then
-  #     echo "${BOLD}${BG_GREEN}Active${RESET}"
-  #     echo -e "Connecting...\c"
-  #     # run_client $*
-  #     # run_client
-  #     /usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/bin/emacsclient -nw "$@"
-  #     echo "${BOLD}${BG_GREEN}DONE${RESET}"
-  # else
-  #     echo "${BOLD}${BG_RED}Inactive${RESET}"
-  #     echo -e "Emacs server is starting...\c"
-  #     ${EMACS}
-  #     # open -a ${EMACS}
-  #     echo "${BOLD}${BG_GREEN}DONE${RESET}"
-
-  #     # echo -e "Trying connecting...\c"
-  #     # until run_client $* &> /dev/null;[ $? -eq 0 ]
-  #     # do
-  #     #     sleep 1
-  #     # done
-  #     # echo "${BOLD}${BG_GREEN}DONE${RESET}"
-  # fi
-
-  # function run_client(){
-  #     if [ $# -ne 0 ]
-  #     then
-  #         ${EMACS_CLIENT} ${DEFAULT_SERVER} ${NO_WAIT} $@
-  #     else
-  #         ${EMACS_CLIENT} ${DEFAULT_SERVER} ${NO_WAIT} ${DEFAULT_ARGS} &> /dev/null
-  #         # ${EMACS_CLIENT} ${DEFAULT_SERVER} ${NO_WAIT} ${DEFAULT_ARGS} "${DEFAULT_EVAL}" &> /dev/null
-  #     fi
-  # }
-
-  # echo -e "Checking Emacs server status...\c"
-  # # if pgrep Emacs &> /dev/null
-  # if [ -e ~/.emacs.d/server/server ]
-  # then
-  #     echo "${BOLD}${BG_GREEN}Active${RESET}"
-  #     echo -e "Connecting...\c"
-  #     run_client $*
-  #     echo "${BOLD}${BG_GREEN}DONE${RESET}"
-  # else
-  #     echo "${BOLD}${BG_RED}Inactive${RESET}"
-  #     echo -e "Emacs server is starting...\c"
-  #     open -a ${EMACS}
-  #     echo "${BOLD}${BG_GREEN}DONE${RESET}"
-
-  #     echo -e "Trying connecting...\c"
-  #     until run_client $* &> /dev/null;[ $? -eq 0 ]
-  #     do
-  #         sleep 1
-  #     done
-  #     echo "${BOLD}${BG_GREEN}DONE${RESET}"
-  # fi
 #+END_SRC
 
 Lets give it permissions,
@@ -196,8 +149,8 @@ chmod +x /.emacs.d/skhd-emacs-client-server.sh
 [[https://github.com/joaotavora/yasnippet][yasnippet]] is configured through the [[https://www.spacemacs.org/layers/+completion/auto-completion/README.html][auto-completion]] layer in spacemacs.
 [[https://jaketrent.com/post/code-snippets-spacemacs/][Here's]] a good blog post on yasnippets in spacemacs.
 I setup a private snippets directory that I can version control easily and enabled snippets in my completion popup,
-#+BEGIN_SRC 
-(auto-completion :variables 
+#+BEGIN_SRC
+(auto-completion :variables
       auto-completion-private-snippets-directory "~/.dotfiles/spacemacs-base-new/private/snippets"
       auto-completion-enable-snippets-in-popup t)
 #+END_SRC
@@ -206,7 +159,7 @@ I setup a private snippets directory that I can version control easily and enabl
 1. To run a command in spacemacs =SPC :=,
 2. Create a new snippet =yas-new-snippet=,
    1. Tab-stops are defined by the $, followed by their tab index.
-   2. $1 will be the first tab-stop, allowing for dynamic value insertion. 
+   2. $1 will be the first tab-stop, allowing for dynamic value insertion.
    3. Specifying the same tab-stop multiple times means that when inserting your dynamic value, it will appear in each place but only needing to be typed out once.
    4. $0 is always where the cursor ends, with no opportunity for value insertion.
 
@@ -261,10 +214,10 @@ In the =layers.el= file I include the org layer and setup reveal, projectile and
       (mapcar '(lambda (file)
                     (when (file-exists-p file)
                       (push file org-agenda-files)))
-              (org-projectile-todo-files))) 
+              (org-projectile-todo-files)))
     #+END_SRC
- 
-- hugo - 
+
+- hugo -
     #+BEGIN_SRC emacs-lisp
     (configuration-layer/declare-layers '(
                                           (org :variables org-enable-reveal-js-support t
@@ -283,7 +236,7 @@ In the =layers.el= file I include the org layer and setup reveal, projectile and
           org-startup-indented t ;; Keep the indentation well structured
           org-agenda-files '("/Users/aidanscannell/Dropbox/org/agenda") ;; set the agenda files.
           org-agenda-files '("/Users/aidanscannell/Dropbox/org/"))
-   #+end_src 
+   #+end_src
 ***** Writing in Org  Mode
 
 | Key binding | Description                |
@@ -513,7 +466,7 @@ Mention snippets.
     (setq org-agenda-skip-deadline-if-done t)
     (setq org-agenda-skip-scheduled-if-done t)
 #+end_src
-I set the default agenda to 
+I set the default agenda to
  1. show 10 days (instead of 7),
  2. start 3 days before the current day,
 #+begin_src emacs-lisp :tangle yes
@@ -540,9 +493,9 @@ git
 #+end_src
 ***** Magit-status =SPC g s=
 Magit status is incredible and I recommend everyone to check it out.
-I particularly like how easy it is to 
-- stage and unstage files, 
-- commit specific lines of a file, 
+I particularly like how easy it is to
+- stage and unstage files,
+- commit specific lines of a file,
 - manage my branches and remotes,
 - use git diff, rebase, cherry pick and log.
 ***** Time Machine
@@ -550,7 +503,7 @@ The git time machine is super useful =SPC g t=. You can skip through previous co
 **** Extra
 
 In =~/.config/skhd/skhdrc= create a keyboard shortcut for GUI Emacs,
-#+BEGIN_SRC 
+#+BEGIN_SRC
 cmd - m : /usr/local/bin/emacs
 cmd - m : ~/.emacs.d/emacs-client-server.sh
 #+END_SRC
@@ -562,7 +515,7 @@ I edited the spacemacs "~/.emacs.d/core/core-spacemacs.el"
 #+BEGIN_SRC
 (setq inhibit-startup-screen t)
 (spacemacs-buffer/goto-buffer)
- 
+
 to
 
 (setq inhibit-startup-screen nil)
@@ -570,15 +523,6 @@ to
 ;;  (spacemacs-buffer/goto-buffer)
 #+END_SRC
 
-*** TODO spacehammer
-*** TODO Music
-**** ncmpcpp
-**** mpd
-**** mopidy
-*** TODO Mutt
-**** Mutt Wizard
-**** mybsync
-*** TODO ranger
 *** TODO skhd
 
 In =~/.config/skhd/skhdrc= create a keyboard shortcut,
@@ -590,17 +534,26 @@ In =~/.config/skhd/skhdrc= create a keyboard shortcut,
 - =brew install jq=
 - Installed SF Fonts
 - Had to disabled weather widget and changed.
-#+BEGIN_SRC 
+#+BEGIN_SRC
  yabai -m signal --add event=space_changed \
-    action="osascript -e 'tell application \"Übersicht\" to refresh widget id \"nibar-spaces-primary-jsx\"'" 
+    action="osascript -e 'tell application \"Übersicht\" to refresh widget id \"nibar-spaces-primary-jsx\"'"
 #+END_SRC
 to
-#+BEGIN_SRC 
+#+BEGIN_SRC
  yabai -m signal --add event=space_changed \
-    action="osascript -e 'tell application \"Übersicht\" to refresh widget id \"ayu-nibar-spaces-primary-jsx\"'" 
+    action="osascript -e 'tell application \"Übersicht\" to refresh widget id \"ayu-nibar-spaces-primary-jsx\"'"
 #+END_SRC
 
 *** TODO Yabai
 [[https://github.com/koekeishiya/yabai][Yabai]]
 *** TODO ZSH
 **** Oh my ZSH
+
+*** TODO Music
+**** ncmpcpp
+**** mpd
+**** mopidy
+*** TODO Mutt
+**** Mutt Wizard
+**** mybsync
+*** TODO ranger
