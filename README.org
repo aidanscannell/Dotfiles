@@ -14,7 +14,7 @@ alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 config config --local status.showUntrackedFiles no
 echo "alias config='/usr/bin/git --git-dir=$HOME/Dotfiles/ --work-tree=$HOME'" >> $HOME/.zshrc
 #+END_SRC
-The config alias can be used like,
+The config alias can then be used to add and commit files, for example,
 #+BEGIN_SRC zsh
 config add .zshrc
 config commit -m 'Added zshrc'
@@ -22,12 +22,11 @@ config push
 #+END_SRC
 
 * Config Notes
-** Mac
-*** Emacs
+** Emacs
 
 This section details my Emacs and Spacemacs configurations.
 
-**** Install (with homebrew)
+*** Install (with homebrew)
 Some Emacs installs do not work with yabai tiling window manager or support retina pdf quality in PDFView.
 [[https://github.com/railwaycat/homebrew-emacsmacport][Emacs-mac]] does, so lets install it,
 - =brew install emacs-mac --with-no-title-bars=
@@ -35,7 +34,7 @@ Link emacs-mac to =/usr/local/bin/emacs=.
 - =brew link emacs-mac=
 [[https://ylluminarious.github.io/2019/05/23/emacs-mac-port-introduction/][This is a good blog post detailing the perks of using Emacs Mac Port.]]
 
-**** pdf quality
+*** pdf quality
 Emacs/Emacs-plus install and pdf-tools renders low quality pdfs.
 Use emacs-mac and put this in user-config to fix,
 #+begin_src emacs-lisp :tangle yes
@@ -44,7 +43,7 @@ Use emacs-mac and put this in user-config to fix,
   ;; combined with emacs-mac this gives good odf quality for retina display
   (setq pdf-view-use-scaling t)
 #+end_src
-**** Chemacs
+*** Chemacs
 Emacs profile switcher. Makes it easy to run multiple Emacs configs side by side.
 - =~/.emacs-profile= sets the default config to use,
 - =~/.emacs-profiles.el= sets the all of the configs with the path to their directory and config file,
@@ -64,7 +63,7 @@ Emacs profile switcher. Makes it easy to run multiple Emacs configs side by side
                   (env . (("SPACEMACSDIR" . "~/.dotfiles/spacemacs-base-new"))))))
 #+END_SRC
 
-**** Emacs Server/Client
+*** Emacs Server/Client
 
 # #!/bin/bash
 Use =C-c C-v t= on this src block to "tangle" i.e. create file =~/.emacs.d/emacs-client-server.sh=,
@@ -145,7 +144,7 @@ echo "alias te=\"~/.emacs.d/emacs-client-server.sh\"" >> ~/.zshrc
 chmod +x /.emacs.d/skhd-emacs-client-server.sh
 #+END_SRC
 
-**** yasnippet
+*** yasnippet
 [[https://github.com/joaotavora/yasnippet][yasnippet]] is configured through the [[https://www.spacemacs.org/layers/+completion/auto-completion/README.html][auto-completion]] layer in spacemacs.
 [[https://jaketrent.com/post/code-snippets-spacemacs/][Here's]] a good blog post on yasnippets in spacemacs.
 I setup a private snippets directory that I can version control easily and enabled snippets in my completion popup,
@@ -155,7 +154,7 @@ I setup a private snippets directory that I can version control easily and enabl
       auto-completion-enable-snippets-in-popup t)
 #+END_SRC
 
-***** Create new snippets
+**** Create new snippets
 1. To run a command in spacemacs =SPC :=,
 2. Create a new snippet =yas-new-snippet=,
    1. Tab-stops are defined by the $, followed by their tab index.
@@ -163,24 +162,24 @@ I setup a private snippets directory that I can version control easily and enabl
    3. Specifying the same tab-stop multiple times means that when inserting your dynamic value, it will appear in each place but only needing to be typed out once.
    4. $0 is always where the cursor ends, with no opportunity for value insertion.
 
-****** helm-yas-create-snippet-on-region
+***** helm-yas-create-snippet-on-region
 Run =helm-yas-create-snippet-on-region= when a bit of source code is selected in a source file to create a new snippet.
 
-***** Reload snippets
+**** Reload snippets
 Run =yas-reload-all= to load new snippets into memory.
 
-***** Insert snippet
+**** Insert snippet
 Use =SPC i s= to insert a snippet ("insert snippet").
 
-**** Themes
+*** Themes
 - Change themes using helm-themes =SPC T s=.
 - I added doom-themes and switch between them regularly.
 #+begin_src emacs-lisp
 dotspacemacs-additional-packages '(doom-themes)
 #+end_src
 
-**** Useful Emacs Commands
-***** Describe Functions
+*** Useful Emacs Commands
+**** Describe Functions
 =Describe functions= are powerful Emacs introspection commands to get information
 about functions, variables, modes etc. These commands are bound thusly:
 
@@ -193,7 +192,7 @@ about functions, variables, modes etc. These commands are bound thusly:
 
 Copied from [[https://github.com/syl20bnr/spacemacs/blob/develop/doc/QUICK_START.org][documentation quick start quide]].
 
-**** Org Mode
+*** Org Mode
 I have put my org configuration into a layer called =org-config=.
 In the =layers.el= file I include the org layer and setup reveal, projectile and hugo,
 - reveal.js
@@ -237,7 +236,7 @@ In the =layers.el= file I include the org layer and setup reveal, projectile and
           org-agenda-files '("/Users/aidanscannell/Dropbox/org/agenda") ;; set the agenda files.
           org-agenda-files '("/Users/aidanscannell/Dropbox/org/"))
    #+end_src
-***** Writing in Org  Mode
+**** Writing in Org  Mode
 
 | Key binding | Description                |
 |-------------+----------------------------|
@@ -249,7 +248,7 @@ In the =layers.el= file I include the org layer and setup reveal, projectile and
 | ~SPC m x u~ | make region underline      |
 | ~SPC m x v~ | make region verbatim       |
 
-***** Org with evil-org-mode
+**** Org with evil-org-mode
 
 | Key binding   | Description                     |
 |---------------+---------------------------------|
@@ -264,7 +263,7 @@ In the =layers.el= file I include the org layer and setup reveal, projectile and
 | ~M-H~ / ~M-L~ | Promote or demote subtree       |
 | ~>>~ / ~<<~   | Promote or demote heading       |
 
-***** Babel / Source Blocks
+**** Babel / Source Blocks
 
 | Key binding | Description                              |
 |-------------+------------------------------------------|
@@ -291,14 +290,14 @@ In the =layers.el= file I include the org layer and setup reveal, projectile and
 | ~SPC m b x~ | org-babel-do-key-sequence-in-edit-buffer |
 | ~SPC m b z~ | org-babel-switch-to-session              |
 | ~SPC m b Z~ | org-babel-switch-to-session-with-code    |
-***** Projectile
+**** Projectile
 | Key binding       | Description                                             |
 |-------------------+---------------------------------------------------------|
 | ~SPC a o p~       | Capture a TODO for the current project                  |
 | ~SPC u SPC a o p~ | Capture a TODO for any given project (choose from list) |
 | ~SPC p o~         | Go to the TODOs for the current project                 |
 
-***** Capture buffers and src blocks
+**** Capture buffers and src blocks
 =org-capture-mode= and =org-src-mode= both support the confirm and abort
 conventions.
 
@@ -311,12 +310,12 @@ conventions.
 | ~SPC m k~                                    | abort                                  |
 | ~SPC m r~                                    | org-capture-refile in org-capture-mode |
 
-***** reveal.js
+**** reveal.js
 
-***** Capture
-****** Templates
+**** Capture
+***** Templates
 
-***** Org-ref
+**** Org-ref
 The BibTeX layer includes the following packages,
 - auctex
 - org
@@ -380,7 +379,7 @@ and uses,
 #+END_SRC
 to generate the bibliography.
 
-***** LaTeX
+**** LaTeX
 This section is for creating LaTeX docs outside of org-mode using auctex and reftex, which are built into the spacemacs LaTeX layer.
 
 We want to use pdf-tools to open pdf files from tex,
@@ -394,7 +393,7 @@ We want to use pdf-tools to open pdf files from tex,
 #+end_src
 
 Mention snippets.
-***** Agenda
+**** Agenda
 #+begin_src emacs-lisp :tangle yes
   ;; Org mode settings
   (setq org-directory "~/Dropbox/org/"
@@ -476,7 +475,7 @@ I set the default agenda to
 #+end_src
 If I want to see more days (e.g. 15) I can use =15 SPC a o a=.
 
-****** Project TODOs
+***** Project TODOs
 I add all of the project TODO.org files with,
 #+begin_src emacs-lisp :tangle yes
     (with-eval-after-load 'org-agenda
@@ -486,21 +485,21 @@ I add all of the project TODO.org files with,
                   (push file org-agenda-files)))
               (org-projectile-todo-files)))
 #+end_src
-**** Git
+*** Git
 Emacs/spacemacs provides great git functionality by simply adding the git layer.
 #+begin_src emacs-lisp :tangle yes
 git
 #+end_src
-***** Magit-status =SPC g s=
+**** Magit-status =SPC g s=
 Magit status is incredible and I recommend everyone to check it out.
 I particularly like how easy it is to
 - stage and unstage files,
 - commit specific lines of a file,
 - manage my branches and remotes,
 - use git diff, rebase, cherry pick and log.
-***** Time Machine
+**** Time Machine
 The git time machine is super useful =SPC g t=. You can skip through previous commits and copy commit hashes which can be used with other magit functionality.
-**** Extra
+*** Extra
 
 In =~/.config/skhd/skhdrc= create a keyboard shortcut for GUI Emacs,
 #+BEGIN_SRC
@@ -510,7 +509,7 @@ cmd - m : ~/.emacs.d/emacs-client-server.sh
 this will create a new server if non exist or connect to the one that is running.
 This dramatically improves startup time for subsequent Emacs instances.
 
-**** Superseded
+*** Superseded
 I edited the spacemacs "~/.emacs.d/core/core-spacemacs.el"
 #+BEGIN_SRC
 (setq inhibit-startup-screen t)
@@ -523,12 +522,12 @@ to
 ;;  (spacemacs-buffer/goto-buffer)
 #+END_SRC
 
-*** TODO skhd
+** TODO skhd
 
 In =~/.config/skhd/skhdrc= create a keyboard shortcut,
 =cmd - m : /usr/local/bin/emacs=
 
-*** Status bar
+** Status bar
 Übersicht with a forked version of [[https://github.com/ryanyz10/ayu-nibar][nibar]].
 - =git clone https://github.com/ryanyz10/ayu-nibar $HOME/Library/Application\ Support/Übersicht/widgets/ayu-nibar=
 - =brew install jq=
@@ -544,16 +543,16 @@ to
     action="osascript -e 'tell application \"Übersicht\" to refresh widget id \"ayu-nibar-spaces-primary-jsx\"'"
 #+END_SRC
 
-*** TODO Yabai
+** TODO Yabai
 [[https://github.com/koekeishiya/yabai][Yabai]]
-*** TODO ZSH
-**** Oh my ZSH
+** TODO ZSH
+*** Oh my ZSH
 
-*** TODO Music
-**** ncmpcpp
-**** mpd
-**** mopidy
-*** TODO Mutt
-**** Mutt Wizard
-**** mybsync
-*** TODO ranger
+** TODO Music
+*** ncmpcpp
+*** mpd
+*** mopidy
+** TODO Mutt
+*** Mutt Wizard
+*** mybsync
+** TODO ranger
