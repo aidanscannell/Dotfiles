@@ -1,0 +1,14 @@
+pyflakes
+pep8
+ipython
+numpy
+scipy
+matplotlib
+isort
+autoflake
+importmagic
+epc
+python-language-server[all]
+pyls-isort
+pyls-mypy
+pyls-black
