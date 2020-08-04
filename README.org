@@ -1,0 +1,606 @@
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
+# #+HTML_HEAD: <style>pre.src{background:#343131;color:white;} </style>
+#+HTML_HEAD: <style> #content{max-width:1800px;}</style>
+# #+HTML_HEAD: <style> p{max-width:800px;}</style>
+# #+HTML_HEAD: <style> li{max-width:800px;}</style
+* DrRobots .dotfiles 
+
+To setup symlinks on fresh install run the following commands:
+
+#+BEGIN_SRC 
+chmod +x symlinks.sh
+./symlinks.sh
+#+END_SRC
+
+* Config Notes
+** Mac
+*** Emacs
+
+This file is my Spacemacs configuration in literate form
+
+**** Install (with homebrew)
+Some Emacs installs do not work with yabai tiling window manager or support retina pdf quality in PDFView.
+[[https://github.com/railwaycat/homebrew-emacsmacport][Emacs-mac]] does, so lets install it,
+- =brew install emacs-mac --with-no-title-bars=
+Link emacs-mac to =/usr/local/bin/emacs=.
+- =brew link emacs-mac=
+[[https://ylluminarious.github.io/2019/05/23/emacs-mac-port-introduction/][This is a good blog post detailing the perks of using Emacs Mac Port.]]
+
+**** pdf quality 
+Emacs/Emacs-plus install and pdf-tools renders low quality pdfs.
+Use emacs-mac and put this in user-config to fix,
+#+begin_src emacs-lisp :tangle yes
+  ;; default page width behavior
+  (setq-default pdf-view-display-size 'fit-page)
+  ;; combined with emacs-mac this gives good odf quality for retina display
+  (setq pdf-view-use-scaling t)
+#+end_src
+**** Chemacs
+Emacs profile switcher. Makes it easy to run multiple Emacs configs side by side.
+- =~/.emacs-profile= sets the default config to use,
+- =~/.emacs-profiles.el= sets the all of the configs with the path to their directory and config file,
+#+BEGIN_SRC
+(("vanilla" . ((user-emacs-directory . "~/.dotfiles/vanilla-emacs")))
+
+("spacemacs-old-m" . ((user-emacs-directory . "~/spacemacs")
+                 (env . (("SPACEMACSDIR" . "~/.dotfiles/spacemacs-old")))))
+
+("spacemacs-old-d" . ((user-emacs-directory . "~/spacemacs/develop")
+                 (env . (("SPACEMACSDIR" . "~/.dotfiles/spacemacs-old")))))
+
+("spacemacs-master" . ((user-emacs-directory . "~/spacemacs")
+                 (env . (("SPACEMACSDIR" . "~/.dotfiles/spacemacs-base-new")))))
+
+ ("new-config" . ((user-emacs-directory . "~/spacemacs/develop")
+                  (env . (("SPACEMACSDIR" . "~/.dotfiles/spacemacs-base-new"))))))
+#+END_SRC
+
+**** Emacs Server/Client
+
+# #!/bin/bash
+Use =C-c C-v t= on this src block to "tangle" i.e. create file =~/.emacs.d/emacs-client-server.sh=,
+#+BEGIN_SRC bash :tangle ~/.emacs.d/emacs-client-server.sh
+  #!/usr/bin/env zsh
+
+  BG_RED=`tput setaf 1`
+  BG_GREEN=`tput setaf 2`
+  BOLD=`tput bold`
+  RESET=`tput sgr0`
+
+  # EMACS_CLIENT='/usr/local/opt/emacs-mac/bin/emacsclient'
+  # EMACS='/usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/Emacs.sh'
+  # EMACS='/usr/local/opt/emacs-mac/Emacs.app'
+  # EMACS_CLIENT='/usr/local/opt/emacs-mac/bin/emacsclient -s '$HOME'/.emacs.d/server'
+  # EMACS_CLIENT='/usr/local/opt/emacs-mac/bin/emacsclient -s '$HOME'/.emacs.d/server/server '
+  # EMACS_CLIENT='/usr/local/opt/emacs-mac/bin/emacsclient'
+  # EMACS_CLIENT='/usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/bin/emacsclient'
+  # EMACS='/usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/bin/Emacs'
+
+  EMACS='/usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/Emacs.sh'
+  EMACS_CLIENT='/usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/bin/emacsclient'
+
+  DEFAULT_EVAL='(switch-to-buffer "*scratch*")'
+  # DEFAULT_ARGS="-e"
+  DEFAULT_ARGS=""
+  # DEFAULT_SERVER='-s '$HOME'/.emacs.d/server/server'
+  NO_WAIT='-nw'
+  # NO_WAIT='-n'
+
+
+  # Checks if there's a frame open
+  if pgrep Emacs &> /dev/null; then
+  echo "trying emacsclient"
+  /usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/bin/emacsclient -nw "$@"
+  else
+  echo "trying emacs"
+  /usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/Emacs.sh
+  fi
+
+  # function run_client(){
+  #     ${EMACS_CLIENT} ${NO_WAIT} ${DEFAULT_ARGS} $@
+  #     # if [ $# -ne 0 ]
+  #     # then
+  #     #     echo "running basic emacsclient"
+  #     #     ${EMACS_CLIENT} ${NO_WAIT} $@
+  #     # else
+  #     #     # ${EMACS_CLIENT} ${NO_WAIT} ${DEFAULT_ARGS} &> /dev/null
+  #     #     echo "Running full emacsclient"
+  #     #     ${EMACS_CLIENT} ${NO_WAIT} ${DEFAULT_ARGS} "${DEFAULT_EVAL}" &> /dev/null
+  #     # fi
+  # }
+
+  # echo -e "Checking Emacs server status...\c"
+  # if pgrep Emacs &> /dev/null
+  # then
+  #     echo "${BOLD}${BG_GREEN}Active${RESET}"
+  #     echo -e "Connecting...\c"
+  #     # run_client $*
+  #     # run_client
+  #     /usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/bin/emacsclient -nw "$@"
+  #     echo "${BOLD}${BG_GREEN}DONE${RESET}"
+  # else
+  #     echo "${BOLD}${BG_RED}Inactive${RESET}"
+  #     echo -e "Emacs server is starting...\c"
+  #     ${EMACS}
+  #     # open -a ${EMACS}
+  #     echo "${BOLD}${BG_GREEN}DONE${RESET}"
+
+  #     # echo -e "Trying connecting...\c"
+  #     # until run_client $* &> /dev/null;[ $? -eq 0 ]
+  #     # do
+  #     #     sleep 1
+  #     # done
+  #     # echo "${BOLD}${BG_GREEN}DONE${RESET}"
+  # fi
+
+  # function run_client(){
+  #     if [ $# -ne 0 ]
+  #     then
+  #         ${EMACS_CLIENT} ${DEFAULT_SERVER} ${NO_WAIT} $@
+  #     else
+  #         ${EMACS_CLIENT} ${DEFAULT_SERVER} ${NO_WAIT} ${DEFAULT_ARGS} &> /dev/null
+  #         # ${EMACS_CLIENT} ${DEFAULT_SERVER} ${NO_WAIT} ${DEFAULT_ARGS} "${DEFAULT_EVAL}" &> /dev/null
+  #     fi
+  # }
+
+  # echo -e "Checking Emacs server status...\c"
+  # # if pgrep Emacs &> /dev/null
+  # if [ -e ~/.emacs.d/server/server ]
+  # then
+  #     echo "${BOLD}${BG_GREEN}Active${RESET}"
+  #     echo -e "Connecting...\c"
+  #     run_client $*
+  #     echo "${BOLD}${BG_GREEN}DONE${RESET}"
+  # else
+  #     echo "${BOLD}${BG_RED}Inactive${RESET}"
+  #     echo -e "Emacs server is starting...\c"
+  #     open -a ${EMACS}
+  #     echo "${BOLD}${BG_GREEN}DONE${RESET}"
+
+  #     echo -e "Trying connecting...\c"
+  #     until run_client $* &> /dev/null;[ $? -eq 0 ]
+  #     do
+  #         sleep 1
+  #     done
+  #     echo "${BOLD}${BG_GREEN}DONE${RESET}"
+  # fi
+#+END_SRC
+
+Lets give it permissions,
+#+BEGIN_SRC bash :results none
+chmod +x ~/.emacs.d/emacs-client-server.sh
+#+END_SRC
+and set an alias =te= "terminal emacs" for emacsclient,
+#+BEGIN_SRC bash :results none
+echo "alias te=\"~/.emacs.d/emacs-client-server.sh\"" >> ~/.zshrc
+#+END_SRC
+
+
+#+BEGIN_SRC bash :tangle ~/.emacs.d/skhd-emacs-client-server.sh
+  #!/usr/bin/env zsh
+
+  # Checks if there's a frame open
+  if pgrep Emacs &> /dev/null; then
+  echo "Opening emacsclient..."
+  /usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/bin/emacsclient -nqc
+  else
+  echo "Opening Emacs..."
+  /usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/Emacs.sh
+  fi
+#+END_SRC
+#+BEGIN_SRC bash :results none
+chmod +x /.emacs.d/skhd-emacs-client-server.sh
+#+END_SRC
+
+**** yasnippet
+[[https://github.com/joaotavora/yasnippet][yasnippet]] is configured through the [[https://www.spacemacs.org/layers/+completion/auto-completion/README.html][auto-completion]] layer in spacemacs.
+[[https://jaketrent.com/post/code-snippets-spacemacs/][Here's]] a good blog post on yasnippets in spacemacs.
+I setup a private snippets directory that I can version control easily and enabled snippets in my completion popup,
+#+BEGIN_SRC 
+(auto-completion :variables 
+      auto-completion-private-snippets-directory "~/.dotfiles/spacemacs-base-new/private/snippets"
+      auto-completion-enable-snippets-in-popup t)
+#+END_SRC
+
+***** Create new snippets
+1. To run a command in spacemacs =SPC :=,
+2. Create a new snippet =yas-new-snippet=,
+   1. Tab-stops are defined by the $, followed by their tab index.
+   2. $1 will be the first tab-stop, allowing for dynamic value insertion. 
+   3. Specifying the same tab-stop multiple times means that when inserting your dynamic value, it will appear in each place but only needing to be typed out once.
+   4. $0 is always where the cursor ends, with no opportunity for value insertion.
+
+****** helm-yas-create-snippet-on-region
+Run =helm-yas-create-snippet-on-region= when a bit of source code is selected in a source file to create a new snippet.
+
+***** Reload snippets
+Run =yas-reload-all= to load new snippets into memory.
+
+***** Insert snippet
+Use =SPC i s= to insert a snippet ("insert snippet").
+
+**** Themes
+- Change themes using helm-themes =SPC T s=.
+- I added doom-themes and switch between them regularly.
+#+begin_src emacs-lisp
+dotspacemacs-additional-packages '(doom-themes)
+#+end_src
+
+**** Useful Emacs Commands
+***** Describe Functions
+=Describe functions= are powerful Emacs introspection commands to get information
+about functions, variables, modes etc. These commands are bound thusly:
+
+| Key binding | Description       |
+|-------------+-------------------|
+| ~SPC h d f~ | describe-function |
+| ~SPC h d k~ | describe-key      |
+| ~SPC h d m~ | describe-mode     |
+| ~SPC h d v~ | describe-variable |
+
+Copied from [[https://github.com/syl20bnr/spacemacs/blob/develop/doc/QUICK_START.org][documentation quick start quide]].
+
+**** Org Mode
+I have put my org configuration into a layer called =org-config=.
+In the =layers.el= file I include the org layer and setup reveal, projectile and hugo,
+- reveal.js
+
+    Create reveal.js presentations in org mode.
+    I currently add the following line to each =.org= file,
+    #+begin_src emacs-lisp :tangle yes
+    #+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js@3.8.0
+    #+end_src
+    because I haven't been able to successfully set the =org-re-reveal-root= variable to =(sqetq org-re-reveal-root ~/reveal.js/)=.
+
+- org projectile
+
+    I chose to use per-project TODO files (called =TODOs.org=) and I added the below code to add them to the agenda,
+    #+BEGIN_SRC emacs-lisp
+    (with-eval-after-load 'org-agenda
+      (require 'org-projectile)
+      (mapcar '(lambda (file)
+                    (when (file-exists-p file)
+                      (push file org-agenda-files)))
+              (org-projectile-todo-files))) 
+    #+END_SRC
+ 
+- hugo - 
+    #+BEGIN_SRC emacs-lisp
+    (configuration-layer/declare-layers '(
+                                          (org :variables org-enable-reveal-js-support t
+                                                          org-enable-hugo-support t
+                                                          org-projectile-file "TODOs.org")
+                                          ))
+    #+END_SRC
+
+   #+begin_src emacs-lisp :tangle yes
+    (setq org-directory "/Users/aidanscannell/Dropbox/org/"
+          org-default-notes-file "~/Dropbox/org/notes.org"
+          org-contacts-files '("~/Dropbox/org/contacts.org")
+          org-todo-keywords '((sequence "SOMEDAY" "TODO" "PROGRESS" "|"
+                      "DONE" "DELEGATED" "CANCELLED"))
+          ;; org-bullets-bullet-list '("■" "◆" "▲" "▶")
+          org-startup-indented t ;; Keep the indentation well structured
+          org-agenda-files '("/Users/aidanscannell/Dropbox/org/agenda") ;; set the agenda files.
+          org-agenda-files '("/Users/aidanscannell/Dropbox/org/"))
+   #+end_src 
+***** Writing in Org  Mode
+
+| Key binding | Description                |
+|-------------+----------------------------|
+| ~SPC m x b~ | make region bold           |
+| ~SPC m x c~ | make region code           |
+| ~SPC m x i~ | make region italic         |
+| ~SPC m x r~ | clear region emphasis      |
+| ~SPC m x s~ | make region strike-through |
+| ~SPC m x u~ | make region underline      |
+| ~SPC m x v~ | make region verbatim       |
+
+***** Org with evil-org-mode
+
+| Key binding   | Description                     |
+|---------------+---------------------------------|
+| ~gj~ / ~gk~   | Next/previous element (heading) |
+| ~gh~ / ~gl~   | Parent/child element (heading)  |
+| ~gH~          | Root heading                    |
+| ~ae~          | Element text object             |
+| ~ar~          | Subtree text object             |
+| ~M-j~ / ~M-k~ | Move heading                    |
+| ~M-h~ / ~M-l~ | Promote or demote heading       |
+| ~M-J~ / ~M-K~ | Move subtree                    |
+| ~M-H~ / ~M-L~ | Promote or demote subtree       |
+| ~>>~ / ~<<~   | Promote or demote heading       |
+
+***** Babel / Source Blocks
+
+| Key binding | Description                              |
+|-------------+------------------------------------------|
+| ~SPC m b .~ | Enter Babel Transient State              |
+| ~SPC m b a~ | org-babel-sha1-hash                      |
+| ~SPC m b b~ | org-babel-execute-buffer                 |
+| ~SPC m b c~ | org-babel-check-src-block                |
+| ~SPC m b d~ | org-babel-demarcate-block                |
+| ~SPC m b e~ | org-babel-execute-maybe                  |
+| ~SPC m b f~ | org-babel-tangle-file                    |
+| ~SPC m b g~ | org-babel-goto-named-src-block           |
+| ~SPC m b i~ | org-babel-lob-ingest                     |
+| ~SPC m b I~ | org-babel-view-src-block-info            |
+| ~SPC m b j~ | org-babel-insert-header-arg              |
+| ~SPC m b l~ | org-babel-load-in-session                |
+| ~SPC m b n~ | org-babel-next-src-block                 |
+| ~SPC m b o~ | org-babel-open-src-block-result          |
+| ~SPC m b p~ | org-babel-previous-src-block             |
+| ~SPC m b r~ | org-babel-goto-named-result              |
+| ~SPC m b s~ | org-babel-execute-subtree                |
+| ~SPC m b t~ | org-babel-tangle                         |
+| ~SPC m b u~ | org-babel-goto-src-block-head            |
+| ~SPC m b v~ | org-babel-expand-src-block               |
+| ~SPC m b x~ | org-babel-do-key-sequence-in-edit-buffer |
+| ~SPC m b z~ | org-babel-switch-to-session              |
+| ~SPC m b Z~ | org-babel-switch-to-session-with-code    |
+***** Projectile
+| Key binding       | Description                                             |
+|-------------------+---------------------------------------------------------|
+| ~SPC a o p~       | Capture a TODO for the current project                  |
+| ~SPC u SPC a o p~ | Capture a TODO for any given project (choose from list) |
+| ~SPC p o~         | Go to the TODOs for the current project                 |
+
+***** Capture buffers and src blocks
+=org-capture-mode= and =org-src-mode= both support the confirm and abort
+conventions.
+
+| Key binding                                  | Description                            |
+|----------------------------------------------+----------------------------------------|
+| ~SPC m <dotspacemacs-major-mode-leader-key>~ | confirm in =org-capture-mode=          |
+| ~SPC m '​~                                    | confirm in =org-src-mode=              |
+| ~SPC m c~                                    | confirm                                |
+| ~SPC m a~                                    | abort                                  |
+| ~SPC m k~                                    | abort                                  |
+| ~SPC m r~                                    | org-capture-refile in org-capture-mode |
+
+***** reveal.js
+
+***** Capture
+****** Templates
+
+***** Org-ref
+The BibTeX layer includes the following packages,
+- auctex
+- org
+- org-ref
+- markdown-mode
+- (helm-bibtex :requires helm)
+- biblio
+- biblio-core
+I configured org-ref to use my mendeley .bib file at =~/Dropbox/org/ref/mendeley/library.bib=
+#+begin_src emacs-lisp :tangle yes
+  (setq org-ref-bibliography-notes "~/Dropbox/org/ref/notes.org"
+        org-ref-default-bibliography '("~/Dropbox/org/ref/mendeley/library.bib") ;; mendeley bibfile
+        ;; TODO org-ref-default-bibliography is where org-ref looks for citations (mendeley bibfile) AND
+        ;; where it writes bib information to e.g. using org-ref-pdf
+        org-ref-pdf-directory "~/Dropbox/org/ref/org-ref-pdfs/") ;; where org-ref saves papers
+#+end_src
+Org-ref provides a convenient function for opening pdfs belonging to mendeley bibtex items.
+Mendely adds the pdf file path to a =file= property in the bibtex entry and org-ref uses this.
+#+begin_src emacs-lisp :tangle yes
+  (setq org-ref-get-pdf-filename-function 'org-ref-get-mendeley-filename)
+#+end_src
+I want to open these pdfs using pdf-tools so that I can view them inside emacs in pdf-view-mode.
+#+begin_src emacs-lisp :tangle yes
+  (defun my/org-ref-open-pdf-at-point ()
+    "Open the pdf for bibtex key under point if it exists."
+    (interactive)
+    (let* ((results (org-ref-get-bibtex-key-and-file))
+           (key (car results))
+           (pdf-file (funcall org-ref-get-pdf-filename-function key)))
+      (if (file-exists-p pdf-file)
+          (find-file pdf-file)
+        (message "No PDF found for %s" key))))
+
+  (setq org-ref-open-pdf-function 'my/org-ref-open-pdf-at-point)
+#+end_src
+This function makes =SPC m a= (TEX-run-all-command) open the pdf in pdf-view-mode in emacs.
+# This function also sets the org export to LaTeX command =C-c C-e l o= to open in pdf-view-mode.
+
+
+In order to make sure that the bibliography is made when exporting org to latex-pdf,
+#+begin_src emacs-lisp :tangle yes
+  (setq org-latex-pdf-process
+        '("pdflatex -interaction nonstopmode -output-directory %o %f"
+          "bibtex %b"
+          "pdflatex -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -interaction nonstopmode -output-directory %o %f"))
+#+end_src
+
+I chose to use BibLaTeX over BibTeX,
+#+begin_src emacs-lisp :tangle yes
+  (setq bibtex-dialect 'biblatex)
+#+end_src
+which requires the following at the top of the org file,
+#+BEGIN_SRC org
+#+LATEX_HEADER: \usepackage[citestyle=authoryear-icomp,bibstyle=authoryear, hyperref=true,backref=false,maxcitenames=1,url=false,backend=bibtex,natbib=true] {biblatex}
+#+LATEX_HEADER: \addbibresource{~/Dropbox/org/ref/mendeley/library.bib}
+#+END_SRC
+and uses,
+#+BEGIN_SRC org
+\printbibliography
+#+END_SRC
+to generate the bibliography.
+
+***** LaTeX
+This section is for creating LaTeX docs outside of org-mode using auctex and reftex, which are built into the spacemacs LaTeX layer.
+
+We want to use pdf-tools to open pdf files from tex,
+#+begin_src emacs-lisp :tangle yes
+  (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+        TeX-source-correlate-start-server t)
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+  (setq reftex-default-bibliography '("~/Dropbox/org/ref/mendeley/library.bib"))
+#+end_src
+
+Mention snippets.
+***** Agenda
+#+begin_src emacs-lisp :tangle yes
+  ;; Org mode settings
+  (setq org-directory "~/Dropbox/org/"
+        org-default-notes-file "~/Dropbox/org/notes.org"
+        org-contacts-files '("~/Dropbox/org/contacts.org")
+        org-todo-keywords '((sequence "TODO" "SOMEDAY" "PROGRESS" "|"
+                                      "DONE" "DELEGATED" "CANCELLED"))
+        org-startup-indented t ;; Keep the indentation well structured
+        org-agenda-files '("~/Dropbox/org/agenda/routine.org"
+                           "~/Dropbox/org/1.todo.org"
+                           "~/Dropbox/org/agenda/calendar.org"
+                           "~/Dropbox/org/agenda/uni.org")) ;; set the agenda files.
+  ;; Ignore scheduled tasks in task list view (SPC m t)
+  (setq org-agenda-todo-ignore-scheduled t)
+  (setq org-agenda-todo-ignore-deadlines t)
+  ;; Skip finished items
+  (setq org-agenda-skip-deadline-if-done t)
+  (setq org-agenda-skip-scheduled-if-done t)
+  ;; start agenda view from today
+  (setq org-agenda-start-on-weekday nil)
+
+  (setq org-agenda-span 10
+        org-agenda-start-on-weekday nil
+        org-agenda-start-day "-3d")
+
+  ;; add the per project todo.org files to the agenda
+  (with-eval-after-load 'org-agenda
+    (require 'org-projectile)
+    (mapcar (lambda (file)
+              (when (file-exists-p file)
+                (push file org-agenda-files)))
+            (org-projectile-todo-files)))
+#+end_src
+- "~/Dropbox/org/agenda/routine.org" contains my daily/weekly/monthly routines e.g. coffee, lunch, supervisor meeting.
+- "~/Dropbox/org/1.todo.org" contains all of my non project TODOs that I want to add to my agenda.
+- "~/Dropbox/org/agenda/calendar.org" contains events/deadlines/meetings that are not uni related.
+- "~/Dropbox/org/agenda/uni.org" contains event/deadlines/meetings that are uni related.
+#+begin_src emacs-lisp :tangle yes
+    (setq org-agenda-files '("~/Dropbox/org/agenda/routine.org"
+                             "~/Dropbox/org/1.todo.org"
+                             "~/Dropbox/org/agenda/calendar.org"
+                             "~/Dropbox/org/agenda/uni.org")) ;; set the agenda files.
+    ;; Ignore scheduled tasks in task list view (SPC m t)
+    (setq org-agenda-todo-ignore-scheduled t)
+    (setq org-agenda-todo-ignore-deadlines t)
+    ;; Skip finished items
+    (setq org-agenda-skip-deadline-if-done t)
+    (setq org-agenda-skip-scheduled-if-done t)
+    ;; start agenda view from today
+    (setq org-agenda-start-on-weekday nil)
+
+    (setq org-agenda-span 10
+          org-agenda-start-on-weekday nil
+          org-agenda-start-day "-3d")
+
+    ;; add the per project todo.org files to the agenda
+    (with-eval-after-load 'org-agenda
+      (require 'org-projectile)
+      (mapcar (lambda (file)
+                (when (file-exists-p file)
+                  (push file org-agenda-files)))
+              (org-projectile-todo-files)))
+#+end_src
+#+begin_src emacs-lisp :tangle yes
+    ;; Ignore scheduled tasks in task list view (SPC m t)
+    (setq org-agenda-todo-ignore-scheduled t)
+    (setq org-agenda-todo-ignore-deadlines t)
+    ;; Skip finished items
+    (setq org-agenda-skip-deadline-if-done t)
+    (setq org-agenda-skip-scheduled-if-done t)
+#+end_src
+I set the default agenda to 
+ 1. show 10 days (instead of 7),
+ 2. start 3 days before the current day,
+#+begin_src emacs-lisp :tangle yes
+    (setq org-agenda-span 10
+          org-agenda-start-on-weekday nil
+          org-agenda-start-day "-3d")
+#+end_src
+If I want to see more days (e.g. 15) I can use =15 SPC a o a=.
+
+****** Project TODOs
+I add all of the project TODO.org files with,
+#+begin_src emacs-lisp :tangle yes
+    (with-eval-after-load 'org-agenda
+      (require 'org-projectile)
+      (mapcar (lambda (file)
+                (when (file-exists-p file)
+                  (push file org-agenda-files)))
+              (org-projectile-todo-files)))
+#+end_src
+**** Git
+Emacs/spacemacs provides great git functionality by simply adding the git layer.
+#+begin_src emacs-lisp :tangle yes
+git
+#+end_src
+***** Magit-status =SPC g s=
+Magit status is incredible and I recommend everyone to check it out.
+I particularly like how easy it is to 
+- stage and unstage files, 
+- commit specific lines of a file, 
+- manage my branches and remotes,
+- use git diff, rebase, cherry pick and log.
+***** Time Machine
+The git time machine is super useful =SPC g t=. You can skip through previous commits and copy commit hashes which can be used with other magit functionality.
+**** Extra
+
+In =~/.config/skhd/skhdrc= create a keyboard shortcut for GUI Emacs,
+#+BEGIN_SRC 
+cmd - m : /usr/local/bin/emacs
+cmd - m : ~/.emacs.d/emacs-client-server.sh
+#+END_SRC
+this will create a new server if non exist or connect to the one that is running.
+This dramatically improves startup time for subsequent Emacs instances.
+
+**** Superseded
+I edited the spacemacs "~/.emacs.d/core/core-spacemacs.el"
+#+BEGIN_SRC
+(setq inhibit-startup-screen t)
+(spacemacs-buffer/goto-buffer)
+ 
+to
+
+(setq inhibit-startup-screen nil)
+;; (setq inhibit-startup-screen t)
+;;  (spacemacs-buffer/goto-buffer)
+#+END_SRC
+
+*** TODO spacehammer
+*** TODO Music
+**** ncmpcpp
+**** mpd
+**** mopidy
+*** TODO Mutt
+**** Mutt Wizard
+**** mybsync
+*** TODO ranger
+*** TODO skhd
+
+In =~/.config/skhd/skhdrc= create a keyboard shortcut,
+=cmd - m : /usr/local/bin/emacs=
+
+*** Status bar
+Übersicht with a forked version of [[https://github.com/ryanyz10/ayu-nibar][nibar]].
+- =git clone https://github.com/ryanyz10/ayu-nibar $HOME/Library/Application\ Support/Übersicht/widgets/ayu-nibar=
+- =brew install jq=
+- Installed SF Fonts
+- Had to disabled weather widget and changed.
+#+BEGIN_SRC 
+ yabai -m signal --add event=space_changed \
+    action="osascript -e 'tell application \"Übersicht\" to refresh widget id \"nibar-spaces-primary-jsx\"'" 
+#+END_SRC
+to
+#+BEGIN_SRC 
+ yabai -m signal --add event=space_changed \
+    action="osascript -e 'tell application \"Übersicht\" to refresh widget id \"ayu-nibar-spaces-primary-jsx\"'" 
+#+END_SRC
+
+*** TODO Yabai
+[[https://github.com/koekeishiya/yabai][Yabai]]
+*** TODO ZSH
+**** Oh my ZSH
