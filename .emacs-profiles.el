@@ -1,17 +1,17 @@
-(("vanilla" . ((user-emacs-directory . "~/.dotfiles/vanilla-emacs")))
+(("vanilla" . ((user-emacs-directory . "~/.emacs.d/configs/vanilla-emacs")))
 
 ("spacemacs-old-m" . ((user-emacs-directory . "~/spacemacs")
-                 (env . (("SPACEMACSDIR" . "~/.dotfiles/spacemacs-old")))))
+                 (env . (("SPACEMACSDIR" . "~/.emacs.d/configs/spacemacs-old")))))
 
 ("spacemacs-old-d" . ((user-emacs-directory . "~/spacemacs/develop")
-                 (env . (("SPACEMACSDIR" . "~/.dotfiles/spacemacs-old")))))
+                 (env . (("SPACEMACSDIR" . "~/.emacs.d/configs/spacemacs-old")))))
 
 ("spacemacs-master" . ((user-emacs-directory . "~/spacemacs")
-                 (env . (("SPACEMACSDIR" . "~/.dotfiles/spacemacs-base-new")))))
+                 (env . (("SPACEMACSDIR" . "~/.emacs.d/configs/spacemacs-base-new")))))
 
 ("org-config" . ((user-emacs-directory . "~/spacemacs/develop-org")
-                       (env . (("SPACEMACSDIR" . "~/.dotfiles/spacemacs-org-config")))))
+                       (env . (("SPACEMACSDIR" . "~/.emacs.d/configs/spacemacs-org-config")))))
 
  ("new-config" . ((user-emacs-directory . "~/spacemacs/develop")
-                  (env . (("SPACEMACSDIR" . "~/.dotfiles/spacemacs-base-new"))))))
+                  (env . (("SPACEMACSDIR" . "~/.emacs.d/configs/spacemacs-base-new"))))))
 
