@@ -582,7 +582,7 @@ before packages are loaded."
   (setq deft-extension "org")
   (setq deft-text-mode 'org-mode)
   ;; (setq deft-directory "~/Dropbox/org")
-  (setq deft-directory "~/.dotfiles")
+  ;; (setq deft-directory "~/.dotfiles")
   (setq deft-recursive nil)
 
   (server-start)
@@ -742,11 +742,11 @@ before packages are loaded."
 
   ;; hack to stop projectile failing with git submodules
   (setq projectile-git-submodule-command nil)
-  (setq projectile-project-search-path '("~/Documents/phd-genral" "~/.dotfiles" "~/.dotfiles/spacemacs-base-new"))
+  (setq projectile-project-search-path '("~/Documents/phd-genral" "~/Dotfiles" "~/.emacs.d/configs/spacemacs-base-new"))
 
-  (defun my/open-readme ()
-    (interactive)
-    (find-file "~/.dotfiles/README.org"))
+  ;; (defun my/open-readme ()
+  ;;   (interactive)
+  ;;   (find-file "~/.dotfiles/README.org"))
 
   (spacemacs/set-leader-keys
     "or" 'my/open-readme
