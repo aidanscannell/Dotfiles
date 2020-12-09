@@ -10,8 +10,14 @@
                  (env . (("SPACEMACSDIR" . "~/.emacs.d/configs/spacemacs-base-new")))))
 
 ("org-config" . ((user-emacs-directory . "~/spacemacs/develop-org")
-                       (env . (("SPACEMACSDIR" . "~/.emacs.d/configs/spacemacs-org-config")))))
+                 (env . (("SPACEMACSDIR" . "~/.emacs.d/configs/spacemacs-org-config")))))
 
- ("new-config" . ((user-emacs-directory . "~/spacemacs/develop")
-                  (env . (("SPACEMACSDIR" . "~/.emacs.d/configs/spacemacs-base-new"))))))
+("doom"   . ((user-emacs-directory . "~/doom-emacs")
+             (env . (("DOOMDIR" . "~/.emacs.d/configs/doom-config")))))
+
+("doom2"   . ((user-emacs-directory . "~/doom-emacs")))
+
+("new-config" . ((user-emacs-directory . "~/spacemacs/develop")
+                 (env . (("SPACEMACSDIR" . "~/.emacs.d/configs/spacemacs-base-new")))))
+ )
 
