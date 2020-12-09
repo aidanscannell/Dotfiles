@@ -1,0 +1,32 @@
+# -*- mode: snippet -*-
+#name : article-latex-header
+#key : article-latex-header
+#contributor : Aidan Scannell
+# --
+#+TITLE:     $0
+#+AUTHOR:    Aidan Scannell
+#+EMAIL:     aidan.scannnell@bristol.ac.uk
+#+LATEX_CLASS: article
+#+LATEX_HEADER: \DeclareMathOperator{\R}{\mathbb{R}}
+#+LATEX_HEADER: \DeclareMathOperator{\E}{\mathbb{E}}
+#+LATEX_HEADER: \DeclareMathOperator{\V}{\mathbb{V}}
+#+LATEX_HEADER: \DeclareMathOperator{\K}{\mathbf{K}}
+#+LATEX_HEADER: \usepackage{graphicx}
+#+LATEX_HEADER: \usepackage{todonotes}
+#+LATEX_HEADER: \usepackage{tikz}
+#+LATEX_HEADER: \usetikzlibrary{bayesnet}
+#+LATEX_HEADER: \usepackage[switch]{lineno}
+#+OPTIONS: h:4 toc:nil tags:nil todo:nil ':t ^:{} num:nil
+#+OPTIONS: H:2 num:nil toc:nil \n:nil @:t ::t |:t ^:{} _:{} *:t TeX:t LaTeX:t
+#+LATEX_CLASS_OPTIONS: [paper=letter,oneside,DIV=8]
+#+LATEX_HEADER: \usepackage[citestyle=authoryear-icomp,bibstyle=authoryear, hyperref=true,backref=false,maxcitenames=1,url=false,backend=bibtex,natbib=true] {biblatex}
+#+LATEX_HEADER: \addbibresource{~/Dropbox/org/ref/mendeley/library.bib}
+#+STARTUP: entitiespretty
+
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+OPTIONS: H:2 num:nil toc:nil \n:nil @:t ::t |:t ^:{} _:{} *:t TeX:t LaTeX:t
+# #+STARTUP: showall
+
+
+\printbibliography

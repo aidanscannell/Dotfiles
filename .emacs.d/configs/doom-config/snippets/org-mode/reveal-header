@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: reveal
+# key: reveal
+# --
+#+TITLE: $0
+#+AUTHOR: Aidan Scannell
+#+EMAIL: aidan.scannell@bristol.ac.uk
+#+DATE: 
+#+REVEAL_THEME: black
+#+OPTIONS: num:nil toc:nil ^:nil reveal_title_slide:nil reveal_mathjax:t
+#+REVEAL_TRANS: linear
+#+REVEAL_EXTRA_CSS: ./custom.css
+#+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js@3.8.0

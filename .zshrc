@@ -1,6 +1,11 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+# Make iterm2 pretty with ascii art
+#alias neofetch="neofetch --ascii .config/neofetch/ascii/dr-robot-ascii"
+alias neofetch="neofetch --ascii .config/neofetch/ascii/chewy.txt"
+neofetch --ascii .config/neofetch/ascii/chewy.txt
+
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/aidanscannell/.oh-my-zsh"
 
@@ -84,6 +89,7 @@ plugins=(
   virtualenvwrapper
   vi-mode
   python
+  poetry
   npm
   github)
 
@@ -116,67 +122,60 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # Virtualenvwrapper
-export WORKON_HOME=$HOME/.virtualenvs
-source /usr/local/bin/virtualenvwrapper.sh
+# export WORKON_HOME=$HOME/.virtualenvs
+# source /usr/local/bin/virtualenvwrapper.sh
 
 # hack to make projectile not fail with git submodules
 # export PATH="/usr/local/opt/gettext/bin:$PATH"
 
-# Make iterm2 pretty with ascii art
-alias neofetch="neofetch --ascii .config/neofetch/ascii/dr-robot-ascii"
-neofetch
-
-# Configure emacs and emacsclient
-alias te="~/.emacs.d/emacs-client-server.sh"
-alias emacsclient='/usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/bin/emacsclient'
-alias emacs='/usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/Emacs.sh'
-export EDITOR=""
-#alias emacsclient='/usr/local/opt/emacs-mac/bin/emacsclient'
 
 pdfcompress ()
 {
     gs -q -dNOPAUSE -dBATCH -dSAFER -sDEVICE=pdfwrite -dCompatibilityLevel=1.3 -dPDFSETTINGS=/screen -dEmbedAllFonts=true -dSubsetFonts=true -dColorImageDownsampleType=/Bicubic -dColorImageResolution=144 -dGrayImageDownsampleType=/Bicubic -dGrayImageResolution=144 -dMonoImageDownsampleType=/Bicubic -dMonoImageResolution=144 -sOutputFile=$1.compressed.pdf $1;
 }
 
+##################################
+# Configure emacs and emacsclient
+##################################
+#alias emacsclient='/usr/local/opt/emacs-mac/bin/emacsclient'
+#alias emacs='/usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/Emacs.sh'
+alias emacsclient='/usr/local/opt/emacs-plus/bin/emacsclient'
+alias emacs='/usr/local/opt/emacs-plus/Emacs.app/Contents/MacOS/Emacs'
+export EDITOR="emacs"
+export PATH="$HOME/doom-emacs/bin:$PATH"
+export PATH="/usr/local/opt/ncurses/bin:$PATH"
+
+# Open in terminal with emacsclient if server exists, otherwise open emacs
+alias te="$HOME/.emacs.d/emacs-client-server-term"
+alias em="$HOME/.emacs.d/emacs-client-server"
+
+#################
+# Python Config
+#################
+# Add poetry to your shell
+export PATH="$HOME/.poetry/bin:$PATH"
+fpath+=~/.zfunc
+
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+#export PYENV_VERSION=3.9.0
+export PYENV_VERSION=3.8.6
+
+##################################
 # add swift 4TF to path
+##################################
 export PATH=/Library/Developer/Toolchains/swift-latest/usr/bin:"${PATH}"
 
+##################################
+# Configure dotfiles vc
+##################################
 alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
 
-em()
-{
-    args=""
-    nw=false
-    # check if emacsclient is already running
-    if pgrep -U $(id -u) emacsclient > /dev/null; then running=true; fi
+##################################
+# Configure Kitty
+##################################
+export KITTY_CONFIG_DIRECTORY='~/.config/kitty'
 
-    # check if the user wants TUI mode
-    for arg in "$@"; do
-    	if [ "$arg" = "-nw" ] || [ "$arg" = "-t" ] || [ "$arg" = "--tty" ]
-	then
-    	    nw=true
-    	fi
-    done
-
-    # if called without arguments - open a new gui instance
-    if [ "$#" -eq "0" ] || [ "$running" != true ]; then
-	args=(-c $args) 		# open emacsclient in a new window
-    fi
-    if [ "$#" -gt "0" ]; then
-	# if 'em -' open standard input (e.g. pipe)
-	if [[ "$1" == "-" ]]; then
-    	    TMP="$(mktemp /tmp/emacsstdin-XXX)"
-    	    cat >$TMP
-	    args=($args --eval '(let ((b (generate-new-buffer "*stdin*"))) (switch-to-buffer b) (insert-file-contents "'${TMP}'") (delete-file "'${TMP}'"))')
-	else
-	    args=($@ $args)
-	fi
-    fi
-
-    # emacsclient $args
-    if $nw; then
-	emacsclient "${args[@]}"
-    else
-	(nohup emacsclient "${args[@]}" > /dev/null 2>&1 &) > /dev/null
-    fi
-}
+# Created by `userpath` on 2020-12-04 13:41:10
+export PATH="$PATH:/Users/aidanscannell/.local/bin"
