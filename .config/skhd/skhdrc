@@ -1,7 +1,10 @@
 # open terminal, blazingly fast compared to iTerm/Hyper
 #cmd - return : ~/Applications/iTerm.app/Contents/MacOS/iTerm2 --single-instance -d ~
 #cmd - return : ~/Applications/iTerm.app/Contents/MacOS/iTerm2 -d ~
-cmd - return : ~/Applications/iTerm.app/Contents/MacOS/iTerm2
+#cmd - return : ~/Applications/iTerm.app/Contents/MacOS/iTerm2
+cmd - return : kitty -c ~/.config/kitty/kitty.conf -d ~/
+
+#cmd - d : /usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/Emacs.sh --eval '(dired ~/)'
 
 # open brave browser
 cmd + shift - return : /Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --single-instance
@@ -11,23 +14,21 @@ cmd - i : /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --singl
 # open mpv
 #cmd - m : open -na /Applications/mpv.app $(pbpaste)
 
-# open emacs
+
+# open a GUI instance of emacs
+cmd - g : /usr/local/opt/emacs-plus/Emacs.app/Contents/MacOS/Emacs
+# open a terminal instance of emacs
+cmd + shift - e : emacs
+# open mail in a new terminal instance of emacs
+cmd + shift - m : emacs --eval '(mu4e)'
+
 # This shell script opens a new instance of emacs and starts a server if one isn't already running.
 # If an emacs server is already running then it uses emacsclient and connects to it.
-# This drastically reduces start up time (almost instantaneous). 
-# cmd - m : /Applications/Emacs.app/Contents/MacOS/Emacs --single-instance
-# cmd - m : /Applications/Emacs.app/Contents/MacOS/Emacs
-# cmd - m : /usr/local/bin/emacs
-# cmd - m : /usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/Emacs.sh
-# cmd - m : ~/.emacs.d/emacs-client-server.sh
-#cmd - m : /usr/local/opt/emacs-mac/bin/emacsclient -s ~/.emacs.d/server/server -c
-#cmd - m : /usr/local/opt/emacs-mac/bin/emacsclient -s ~/.emacs.d/server/server -c ~
-#cmd - m : /usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/bin/emacsclient -c
-#cmd - m : ~/.emacs.d/emacs-client-server.sh
-cmd - m : ~/.emacs.d/skhd-emacs-client-server.sh
+#cmd - e : em
+cmd - e : ~/.emacs.d/emacs-client-server
+# similarly but opens mail
+cmd - m : em --eval '(mu4e)'
 
-# open a new instance of emacs (no on same server)
-cmd - g : /usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/Emacs.sh
 
 # focus window
 alt - h : yabai -m window --focus west
