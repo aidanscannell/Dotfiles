@@ -36,6 +36,7 @@
                                 ;; clocker
                                 ;; org-noter
                                 ;; (latex-fragments :location local)
+                                org-re-reveal
                                 (org-present :excluded t)
                                 (org-journal :excluded t)
                                 (org-brain :excluded t)))
@@ -49,16 +50,16 @@
     (setq org-re-reveal-root "~/reveal.js/")
     ;; (setq org-re-reveal-root "https://revealjs.com/")
     ;; (setq org-reveal-root "https://revealjs.com/")
-    (defun toggle-org-reveal-export-on-save ()
-      (interactive)
-      (if (memq 'org-reveal-export-to-html after-save-hook)
-          (progn
-            (remove-hook 'after-save-hook 'org-reveal-export-to-html
-                         t)
-            (message "Disabled org reveal export to html on save for current buffer..."))
-        (add-hook 'after-save-hook 'org-html-export-to-html
-                  nil t)
-        (message "Enabled org reveal export to html on save for current buffer...")))
+    ;; (defun toggle-org-reveal-export-on-save ()
+    ;;   (interactive)
+    ;;   (if (memq 'org-reveal-export-to-html after-save-hook)
+    ;;       (progn
+    ;;         (remove-hook 'after-save-hook 'org-reveal-export-to-html
+    ;;                      t)
+    ;;         (message "Disabled org reveal export to html on save for current buffer..."))
+    ;;     (add-hook 'after-save-hook 'org-html-export-to-html
+    ;;               nil t)
+    ;;     (message "Enabled org reveal export to html on save for current buffer...")))
 
 
     ;; Org mode settings
@@ -110,6 +111,29 @@
                    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                    ("\\paragraph{%s}" . "\\paragraph*{%s}")
                    ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+    (add-to-list 'org-latex-classes
+                 '("mybeamerposter"
+          "\\documentclass[final]{beamer}
+
+\\usepackage[scale=1.24]{beamerposter} % Use the beamerposter package for laying out the poster
+
+\\usetheme[faculty=chemo]{fibeamer} % Uncomment to use Masaryk University's fibeamer theme instead.
+
+
+\\usepackage{graphicx}  % Required for including images
+
+\\usepackage{booktabs} % Top and bottom rules for tables"))
+    ;; \\newlength{\\sepwid}
+    ;; \\newlength{\\onecolwid}
+    ;; \\newlength{\\twocolwid}
+    ;; \\newlength{\\threecolwid}
+    ;; \\setlength{\\paperwidth}{46.8in} % A0 width: 46.8in
+    ;; \\setlength{\\paperheight}{33.1in} % A0 height: 33.1in
+    ;; \\setlength{\\sepwid}{0.024\\paperwidth} % Separation width (white space) between columns
+    ;; \\setlength{\\onecolwid}{0.21\\paperwidth} % Width of one column
+    ;; \\setlength{\\twocolwid}{0.451\\paperwidth} % Width of two columns
+    ;; \\setlength{\\threecolwid}{0.678\\paperwidth} % Width of three columns
 
 ;;     (add-to-list 'org-latex-classes
 ;;                  '("neurips-article-final"
