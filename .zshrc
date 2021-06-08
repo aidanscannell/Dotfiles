@@ -270,20 +270,25 @@ export PATH="/usr/local/opt/ncurses/bin:$PATH"
 #alias te="$HOME/.emacs.d/emacs-client-server-term"
 #alias em="$HOME/.emacs.d/emacs-client-server"
 alias vim=te
+alias ranger=tedired
 
 
 #################
 # Python Config
 #################
-# Add poetry to your shell
-export PATH="$HOME/.poetry/bin:$PATH"
-fpath+=~/.zfunc
-
+export PATH="$(pyenv root)/shims:$PATH"
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
 #export PYENV_VERSION=3.9.0
-export PYENV_VERSION=3.8.6
+# export PYENV_VERSION=3.8.6
+
+# Add poetry to shell
+export PATH="$HOME/.poetry/bin:$PATH"
+fpath+=~/.zfunc
+
+# make google/jax run in 64 bit mode
+export JAX_ENABLE_X64=True
 
 ##################################
 # add swift 4TF to path
@@ -302,3 +307,8 @@ export KITTY_CONFIG_DIRECTORY='~/.config/kitty'
 
 # Created by `userpath` on 2020-12-04 13:41:10
 export PATH="$PATH:/Users/aidanscannell/.local/bin"
+
+##################################
+# Configure direnv
+##################################
+eval "$(direnv hook zsh)"

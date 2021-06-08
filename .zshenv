@@ -61,3 +61,8 @@ function te () {
   # open emacsclient in terminal
   emacsclient -s $TERM_EMACS_SERVER_FILE -nw ${1}
 }
+
+function tedired () {
+  # open dired with emacsclient in terminal
+  emacsclient -s $TERM_EMACS_SERVER_FILE --eval '(dired-jump)' -nw
+}
