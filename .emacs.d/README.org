@@ -6,59 +6,48 @@
    /  /:/  ___   ___ /  /::\   /  /:/ /:/_   __|__|:|\:\   /  /:/~/::\   /  /:/  ___   /  /:/ /::\
   /__/:/  /  /\ /__/\  /:/\:\ /__/:/ /:/ /\ /__/::::| \:\ /__/:/ /:/\:\ /__/:/  /  /\ /__/:/ /:/\:\
   \  \:\ /  /:/ \  \:\/:/__\/ \  \:\/:/ /:/ \  \:\~~\__\/ \  \:\/:/__\/ \  \:\ /  /:/ \  \:\/:/~/:/
-   \  \:\  /:/   \  \::/       \  \::/ /:/   \  \:\        \  \::/       \  \:\  /:/   \  \0.1 /:/
+   \  \:\  /:/   \  \::/       \  \::/ /:/   \  \:\        \  \::/       \  \:\  /:/   \  \2.0 /:/
     \  \:\/:/     \  \:\        \  \:\/:/     \  \:\        \  \:\        \  \:\/:/     \__\/ /:/
      \  \::/       \  \:\        \  \::/       \  \:\        \  \:\        \  \::/        /__/:/
       \__\/         \__\/         \__\/         \__\/         \__\/         \__\/         \__\/
 
+                                          222222222222222
+                                         2:::::::::::::::22
+                                         2::::::222222:::::2
+                                         2222222     2:::::2
+                                                     2:::::2
+                                                     2:::::2
+                                                  2222::::2
+                                             22222::::::22
+                                           22::::::::222
+                                          2:::::22222
+                                         2:::::2
+                                         2:::::2
+                                         2:::::2       222222
+                                         2::::::2222222:::::2
+                                         2::::::::::::::::::2
+                                         22222222222222222222
 
-
-                                   ... ........,**********,...
-                            .%*....       .,/(((#//(//*,*,,,*.,#%&(,,/(##.
-                              %/..                          ,,  ,*,*/(%%.
-                               %/*.                         .. .,,.,#%&
-                                &(,.                       .. ....((%&.
-                                 ,#,.                     ..  ...*/#%
-                                  .#,..                   .  ..,/(%#
-                                   .#,.                  ..  .,,(#%
-                                     #*,.               .. .,,.(%(
-                                    ***//((((((((//****,,**//,/  .
-                                    ///((#%%%%%%%##(///////*./,,,,
-                                     /#(##%%%%%%%%%##(((//*.(**,*
-                                      .(/###%%%%%%##(((/// (/,,,
-                                       ,*/(##%%%%##(((/((/(/*.
-                                       *((###%%%%%%%%%%%&&(*..
-                                       .((###%%%%%%%%##((####/,//
-                                       **//((###(###%%%#%%#&/%(%#(.
-                                      ,**//(((((((/((##%#%#/%##%*/.
-                                     ***///(/(((/////((((%**../..   //
-                                    **//(((###(((((//////%/***(,..   /&
-                                    ,####%%%%%%%%###((//(%,*/((/**    #*
-                                    ./,,                *%..,..*&%    ,#
-                                   ,(,.                 *%   .../%&    @
-                                  *#,.                  *%,  ....,%&   &.
-                                 (/,                   .&&&%/   ..,%&  %,
-                                %/,                        ((.   .,,%&%%/,
-                               #*.                                .*(%%%@,
-                              #,.                                 ..,,%&.,
-                             ,/....                              .... ,%%
-                             %,,.....                  ......   ,* ....#&.
-                             #,,,,..      .....................  ....,/#%*
-                             #*,,*.......  ...................,,,****/(%%,
-                             ,(*/**,.......................,,,,,**//###%#
-                              /#/(((/**,...  .............,,,,/(##%%%##@
-                               /.*/((/,,,,,.,/(###########(/(((((#%%#&&
-                                 ,(#(/,,.......,,,,,,,,/(///(#%%%%#
-                                  ./(*,..                  ..,*((#&/
-                                      ...,..,..,/###(//(#(/*,.. .
 #+END_SRC
 
 * Chemacs
 
-Chemacs is an Emacs profile switcher, it makes it easy to run multiple Emacs
+Chemacs 2 is an Emacs profile switcher, it makes it easy to run multiple Emacs
 configurations side by side.
 
 Think of it as a bootloader for Emacs.
+
+** Differences from Chemacs 1
+
+Emacs intialization used to have a single entry point, either =~/.emacs= or
+=~/.emacs.d/init.el=. More recent Emacsen have introduced a second startup
+script, =~/.emacs/early-init.el=, which runs earlier in the boot process, and
+can be used for things that should happen very early on, like tweaking the GC,
+or disabling UI elements.
+
+Chemacs 2 supports =early-init.el=, Chemacs 1 does not. This does also imply
+that Chemacs 2 needs to be installed as =~/.emacs.d= (a directory), rather than
+simply linking it to =~/.emacs= (a single file).
 
 ** Rationale
 
@@ -83,62 +72,44 @@ various edge cases and use cases that come up.
 
 ** Installation
 
-Clone the Git repository, and run =install.sh=
+Clone the Chemacs 2 repository as =$HOME/.emacs.d=. Note that if you already
+have an Emacs setup in =~/.emacs.d= you need to move it out of the way first. If
+you have an =~/.emacs= startup script then move that out of the way as well.
 
 #+BEGIN_SRC shell
-$ git clone https://github.com/plexus/chemacs.git
-$ cd chemacs
-$ ./install.sh
-OK      Creating symlink ~/.emacs -> /home/arne/chemacs/.emacs
+  [ -f ~/.emacs ] && mv ~/.emacs ~/.emacs.bak
+  [ -d ~/.emacs.d ] && mv ~/.emacs.d ~/.emacs.default
+  git clone https://github.com/plexus/chemacs2.git ~/.emacs.d
 #+END_SRC
 
-The install script will symlink =~/.emacs= to the Chemacs script. If you
-already have a =~/.emacs= you need to move it out of the way first
+Note that this is different from Chemacs 1. Before Chemacs installed itself as
+=~/.emacs= and you could have your own default setup in =~/.emacs.d=. This
+approach no longer works because of =~/.emacs.d/early-init.el=, so Chemacs 2
+needs to be installed as =~/.emacs.d=.
 
-#+BEGIN_SRC shell
-$ ./install.sh
-WARN    chemacs can't be installed, ~/.emacs is in the way
-#+END_SRC
+Next you will need to create a =~/.emacs-profiles.el= file, for details see
+below.
 
-By symlinking you can easily update Chemacs with a =git pull=. Chemacs is not
-available on ELPA/MELPA because its special position in the Emacs boot process
-would cause a chicken and egg problem.
-
-There's a similar script for Windows called =install.sh=.
-
-#+BEGIN_SRC powershell
-$ git clone https://github.com/plexus/chemacs.git
-$ cd chemacs
-$ .\install.ps1
-OK copying file to ~/.emacs
-#+END_SRC
-
-The Windows script copies the ~/.emacs file rather than symlinking it, as
-symlinks in Windows require elevated privileges. To update the file, run
-=install.ps1= a second time, if necessary - it uses hashing to detect
-changes and prompts for conformation before overwriting
-
-#+BEGIN_SRC powershell
-$ .\install.ps1
-WARN content is different between C:\Users\Me\.emacs and C:\Users\Me\repos\chemacs\.emacs
-WARN chemacs may already be installed OR something else may be in the way
-Do you want to overwrite C:\Users\Me\.emacs?: y
-OK updated chemacs files successfully.
-#+END_SRC
+#+begin_src emacs-lisp
+  (("default" . ((user-emacs-directory . "~/.emacs.default"))))
+#+end_src
 
 ** Usage
 
 Chemacs adds an extra command line option to Emacs, =--with-profile=. Profiles
-are configured in =~/.emacs-profiles.el=. If this file does not exist
-Chemacs will create it with a default profile pointing at =~/.emacs.d=.
+are configured in =~/.emacs-profiles.el=.
 
-If no profile is given at the command line then the default profile is used, so
-if you currently have your emacs configuration in =~/.emacs.d= then Chemacs
-will, by default, use your existing configuration.
+If no profile is given at the command line then the =default= profile is used.
 
 #+BEGIN_SRC shell
 $ emacs --with-profile my-profile
 #+END_SRC
+
+There is an option for using profile that is not preconfigured in =~/.emacs-profiles.el=. To accomplish that you can directly provide the profile via the command line, like so
+#+BEGIN_SRC shell
+$ emacs --with-profile '((user-emacs-directory . "/path/to/config"))'
+#+END_SRC
+This method supports all the profile options given below.
 
 ** .emacs-profiles.el
 
@@ -148,7 +119,7 @@ names, and the values/cdrs their configuration.
 The main thing to configure is the =user-emacs-directory=
 
 #+BEGIN_SRC emacs-lisp
-  (("default" . ((user-emacs-directory . "~/.emacs.d")))
+  (("default" . ((user-emacs-directory . "~/.emacs.default")))
    ("spacemacs" . ((user-emacs-directory . "~/spacemacs"))))
 #+END_SRC
 
@@ -181,7 +152,7 @@ can be set using a =~/.emacs-profile= file.
 If your =~/.emacs-profiles.el= file contains the following:
 
 #+BEGIN_SRC emacs-lisp
-  (("default" . ((user-emacs-directory . "~/.emacs.d")))
+  (("default" . ((user-emacs-directory . "~/.emacs.default")))
    ("spacemacs" . ((user-emacs-directory . "~/spacemacs")))
    ("prelude" . ((user-emacs-directory . "~/prelude"))))
 #+END_SRC
@@ -239,6 +210,13 @@ In the following snippet =~/doom-emacs= is where you have cloned doom emacs.
 #+END_SRC
 
 Please refer to [[https://github.com/plexus/chemacs/issues/5][this]] discussion for details.
+
+** FreeDesktop Directories
+
+Both =~/.emacs-profiles.el= and =~/.emacs-profile= can also be stored under =$XDG_CONFIG_HOME/chemacs= (typically =~/.config/chemacs=) as =$XGD_CONFIG_HOME/chemacs/profiles.el= and =$XDG_CONFIG_HOME/chemacs/profile= respectively.
+
+Further, as indicated by the [[http://git.savannah.gnu.org/cgit/emacs.git/tree/etc/NEWS?h=emacs-27][Emacs 27.1 changelog]], Emacs is now compatible with XDG Standards, looking for its configuration files in =${XDG_CONFIG_HOME}/emacs= directory too (provided the traditional =~/.emacs.d= and =~/.emacs= does not exist).
+Therefore, it is perfectly viable to install Chemacs 2 in =${XDG_CONFIG_HOME}/emacs= (usually =~/.config/emacs=) directory - with the aforementioned caveat: _the directory =~/.emacs.d"= and the file ="~/.emacs"= does not exist_.
 
 ** LICENSE
 

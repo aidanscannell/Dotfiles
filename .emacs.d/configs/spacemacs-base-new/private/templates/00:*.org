@@ -1,7 +1,0 @@
-#+TITLE:     
-#+AUTHOR:    Aidan Scannell
-#+EMAIL:     aidan.scannell@bristol.ac.uk
-#+EXPORT_SELECT_TAGS: export
-#+EXPORT_EXCLUDE_TAGS: noexport
-#+OPTIONS: H:2 num:nil toc:nil \n:nil @:t ::t |:t ^:{} _:{} *:t TeX:t LaTeX:t
-#+STARTUP: showall

@@ -1,9 +1,0 @@
-# -*- mode: snippet -*-
-# name: equation-latex
-# key: eq
-# --
-#+BEGIN_EXPORT latex
-\begin{equation} \label{eq-$1}
-$0
-\end{equation}
-#+END_EXPORT
