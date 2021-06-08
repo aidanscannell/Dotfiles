@@ -710,6 +710,7 @@ https://github.com/magit/magit/issues/460 (@cpitclaudel)."
 ;;             (dired-collapse)))
 
 ;; TODO disable all-the-icons-dired-mode in terminal emacs
+(add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 (add-hook 'dired-mode-hook
           (lambda ()
             (interactive)
