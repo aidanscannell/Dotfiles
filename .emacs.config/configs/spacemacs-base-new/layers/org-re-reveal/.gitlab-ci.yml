@@ -1,0 +1,31 @@
+# SPDX-FileCopyrightText: 2017-2020 Jens Lechtenbörger
+# SPDX-License-Identifier: CC0-1.0
+
+image: registry.gitlab.com/oer/docker/emacs-reveal:6.2.0
+
+test:
+  script:
+    - make check
+  only:
+    refs:
+      - master
+      - merge_requests
+    changes:
+      - Makefile
+      - "**/*.el"
+
+pages:
+  stage: deploy
+  script:
+    - emacs --batch -l /root/.emacs -l test-cases/publish.el
+  artifacts:
+    paths:
+      - public
+  only:
+    refs:
+      - master
+      - lechten
+    changes:
+      - "**/*.org"
+      - "**/*.el"
+      - ".gitlab-ci.yml"

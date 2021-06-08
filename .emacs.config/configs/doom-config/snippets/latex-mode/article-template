@@ -1,0 +1,52 @@
+# -*- mode: snippet -*-
+# name: article-template
+# key: article-template
+# --
+
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usetikzlibrary{bayesnet}
+\usepackage[makeroom]{cancel}
+
+\graphicspath{ {./images/} }
+\usepackage{pdfpages}
+ 
+% \usepackage[switch]{lineno}
+\usepackage{todonotes}
+
+
+\DeclareMathOperator{\E}{\mathbb{E}}
+\DeclareMathOperator{\R}{\mathbb{R}}
+
+\title{}
+
+\begin{document}
+\maketitle
+% \linenumbers
+
+\begin{abstract}
+\end{abstract}
+
+\section{Introduction}
+\label{sec:intro}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{}
+  \caption{}
+  \label{fig:fig1}
+\end{figure}
+
+
+\cite{Wanga}
+
+\bibliographystyle{plain}
+\bibliography{'~/Dropbox/library.bib'} % this works
+
+\end{document}

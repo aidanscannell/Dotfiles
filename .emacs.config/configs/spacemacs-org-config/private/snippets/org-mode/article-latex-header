@@ -1,0 +1,24 @@
+# -*- mode: snippet -*-
+#name : article-latex-header
+#key : article-latex-header
+#contributor : Aidan Scannell
+# --
+#+TITLE:     $0
+#+AUTHOR:    Aidan Scannell
+#+EMAIL:     aidan.scannnell@bristol.ac.uk
+
+#+LaTeX_CLASS: article
+#+LATEX_HEADER: \DeclareMathOperator{\R}{\mathbb{R}}
+#+LATEX_HEADER: \DeclareMathOperator{\E}{\mathbb{E}} 
+#+LATEX_HEADER: \DeclareMathOperator{\V}{\mathbb{V}} 
+#+LATEX_HEADER: \DeclareMathOperator{\K}{\mathbf{K}}
+#+LATEX_HEADER: \usepackage{graphicx}
+#+LATEX_HEADER: \usepackage{todonotes}
+#+LATEX_HEADER: \usepackage{tikz}
+#+LATEX_HEADER: \usetikzlibrary{bayesnet}
+#+LATEX_HEADER: \usepackage[switch]{lineno}
+
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+OPTIONS: H:2 num:nil toc:nil \n:nil @:t ::t |:t ^:{} _:{} *:t TeX:t LaTeX:t
+# #+STARTUP: showall

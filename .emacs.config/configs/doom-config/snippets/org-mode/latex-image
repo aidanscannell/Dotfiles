@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: latex-image
+# key: il
+# --
+#+NAME: $0
+#+ATTR_LATEX: :width 1.\textwidth :placement [h] :center nil
+#+caption: My catptio
+[[file:]]
