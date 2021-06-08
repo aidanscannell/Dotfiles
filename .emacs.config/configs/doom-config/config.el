@@ -444,6 +444,25 @@
 ;; (after! org-roam
 ;;   (setq org-roam-directory "~/Dropbox/org/notes.org")
 ;;   )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Config magit to show worktree for dotfiles bare git repo
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun ~/magit-process-environment (env)
+  "Add GIT_DIR and GIT_WORK_TREE to ENV when in a special directory.
+https://github.com/magit/magit/issues/460 (@cpitclaudel)."
+  (let ((default (file-name-as-directory (expand-file-name default-directory)))
+        (home (expand-file-name "~/")))
+    (when (string= default home)
+      ;; (let ((gitdir (expand-file-name "~/dotfiles.git/")))
+      (let ((gitdir (expand-file-name "~/dotfiles/")))
+        (push (format "GIT_WORK_TREE=%s" home) env)
+        (push (format "GIT_DIR=%s" gitdir) env))))
+  env)
+
+(advice-add 'magit-process-environment
+            :filter-return #'~/magit-process-environment)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs Server
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -637,6 +656,7 @@
 
 ;; dired quick links
 (defun my/open-config () (interactive) (dired "/Users/aidanscannell/.config"))
+(defun my/open-dotfiles() (interactive) (dired "/Users/aidanscannell/dotfiles"))
 (defun my/open-python-projects () (interactive) (dired "/Users/aidanscannell/Developer/python-projects"))
 (defun my/open-home () (interactive) (dired "/Users/aidanscannell"))
 (defun my/open-documents () (interactive) (dired "/Users/aidanscannell/Documents"))
@@ -653,6 +673,7 @@
       :leader
       (:prefix-map ("d" . "dired")
        :desc "~/.config" "c"  #'my/open-config
+       :desc "~/dotfiles" "g"  #'my/open-dotfiles
        :desc "here" "d"  #'dired-jump
        :desc "emacs" "e"  #'my/open-emacs
        :desc "~/Documents" "D"  #'my/open-documents
