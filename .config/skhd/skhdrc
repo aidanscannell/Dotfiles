@@ -16,18 +16,27 @@ cmd - i : /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --singl
 
 
 # open a GUI instance of emacs
-cmd - g : /usr/local/opt/emacs-plus/Emacs.app/Contents/MacOS/Emacs
-# open a terminal instance of emacs
-cmd + shift - e : emacs
+# cmd - g : /usr/local/opt/emacs-plus/Emacs.app/Contents/MacOS/Emacs
+# cmd - g : /usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/Emacs
+ 
+# open a instance of emacs and
+# cmd + shift - e : ger
+# cmd + shift - e : /usr/local/opt/emacs-mac/Emacs.app/Contents/MacOS/Emacs
+# cmd + shift - e : gemacs
+# cmd + shift - e : ~/.emacs.d/emacs-client-server
+cmd + shift - e : ~/.emacs.config/emacs-client-server
+
 # open mail in a new terminal instance of emacs
-cmd + shift - m : emacs --eval '(mu4e)'
+# cmd + shift - m : emacs --eval '(mu4e)'
+cmd + shift - m : ge --eval '(mu4e)'
 
 # This shell script opens a new instance of emacs and starts a server if one isn't already running.
 # If an emacs server is already running then it uses emacsclient and connects to it.
-#cmd - e : em
-cmd - e : ~/.emacs.d/emacs-client-server
+cmd - e : ge
+# cmd - e : ~/.emacs.d/emacs-client-server
 # similarly but opens mail
-cmd - m : em --eval '(mu4e)'
+cmd - m : ge --eval '(mu4e)'
+
 
 
 # focus window

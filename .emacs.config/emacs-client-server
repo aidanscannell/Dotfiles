@@ -1,0 +1,17 @@
+#!/usr/bin/env zsh
+# open emacs wihtin zsh environment to ensure config is loaded
+echo "opening emacs"
+emacs
+
+# # Checks if there's a frame open
+# #if pgrep Emacs &> /dev/null; then
+# #if [[ -f $EMACS_SERVER_FILE ]];then
+# # Checks if a server file exists
+# if test -e "$GUI_EMACS_SERVER_FILE"; then
+#   echo "opening emacsclient"
+#   # $EMACS_CLIENT -c
+#   emacsclient -s $GUI_EMACS_SERVER_FILE -c
+# else
+#   echo "opening emacs"
+#   $EMACS
+# fi
