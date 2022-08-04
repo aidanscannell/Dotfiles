@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: align
+# uuid: align
+# key: trigger-key
+# condition: t
+# --
+#+BEGIN_EXPORT latex
+\begin{align}
+\end{align}
+#+END_EXPORT

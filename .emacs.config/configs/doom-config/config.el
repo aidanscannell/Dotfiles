@@ -283,6 +283,14 @@
 ; )
 
 
+(defvar +format-on-save-enabled-modes
+  '(not emacs-lisp-mode    ; elisp's mechanisms are good enough
+        sql-mode           ; sqlformat is currently broken
+        tex-mode           ; latexindent is broken
+        latex-mode
+        html-mode
+        org-msg-edit-mode) ; doesn't need a formatter
+  )
 
 (after! org
   (use-package! org-projectile

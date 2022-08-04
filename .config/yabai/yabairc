@@ -57,11 +57,28 @@ yabai -m config window_gap                   10
 yabai -m signal --add event=window_destroyed action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus mouse"
 yabai -m signal --add event=application_terminated action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus mouse"
 
+# # Space labels
+# yabai -m space 1 --label "Browser"
+# yabai -m space 2 --label "Zotero"
+# yabai -m space 3 --label "Music"
+# yabai -m space 4 --label "Email"
+# yabai -m space 5 --label "Editor"
+
+# yabai -m rule --add app="Zotero" space=2
+# yabai -m rule --add app="Spotify" space=3
+# yabai -m rule --add app="MailMate" space=4
+# yabai -m rule --add app="Emacs" space=5
+
+# yr title='^(Opening)' manage=off layer=above
+# yr title='Library' manage=off layer=above
+# yr app='App Store' manage=off layer=above
+# yr app='Zotero' manage=off layer=above
+# yr app='MailMate' manage=off layer=above
 
 yabai -m rule --add app=Emacs manage=on
 yabai -m rule --add app=zathura manage=on
-#yabai -m rule --add app=Zathura manage=on
-#yabai -m rule --add app=Emacs manage=on space=2
+
+
 
 #yabai -m signal --add event=space_changed \
 #      action="osascript -e 'tell application \"Übersicht\" to refresh widget id \"ayu-nibar-spaces-primary-jsx\"'"

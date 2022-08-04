@@ -312,3 +312,11 @@ export PATH="$PATH:/Users/aidanscannell/.local/bin"
 # Configure direnv
 ##################################
 eval "$(direnv hook zsh)"
+[ -f "/Users/aidanscannell/.ghcup/env" ] && source "/Users/aidanscannell/.ghcup/env" # ghcup-env
+
+##################################
+# Configure direnv
+##################################
+source $(brew --prefix)/opt/chruby/share/chruby/chruby.sh
+source $(brew --prefix)/opt/chruby/share/chruby/auto.sh
+chruby ruby-3.1.2
